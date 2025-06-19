@@ -1,9 +1,24 @@
-// import { Geist, Geist_Mono } from "next/font/google";
+
+
+import { Poppins, Roboto } from 'next/font/google'; // importo las fuentes
+
 import "./globals.css";
 
 // importo  el header y footer para que salgan en todas mis paginas
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+
+const poppins = Poppins({
+  subsets: ['latin'],
+  weight: ['400', '600', '700'],
+  variable: '--font-heading', 
+});
+
+const roboto = Roboto({
+  subsets: ['latin'],
+  weight: ['400', '500'],
+  variable: '--font-body',
+});
 
 // para el seo
 export const metadata = {
@@ -14,7 +29,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="es">
-      <body className={`bg-primary text-white font-body`}>
+      <body   className={`${poppins.variable} ${roboto.variable} bg-primary text-secondary font-body`}>
         <Header/>
         <main className="min-h-screen max-w-7xl mx-auto px-4 py-6">
         {children}

@@ -7,7 +7,7 @@ import Link from "next/link"
 export const Header = () => {
 
     return (
-        <header className="bg-primary text-white p-6 flex justify-between items-center">
+        <header className="bg-secondary text-white p-6 flex justify-between items-center">
             <div className="max-w-7xl mx-auto ">logo
             </div>
             <nav className="space-x-6 font-body text-sm">
