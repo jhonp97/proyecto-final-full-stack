@@ -1,7 +1,11 @@
  @import "tailwindcss";   
 
 
-
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
  :root {
   --primary: #1E1E2F;
@@ -9,9 +13,20 @@
   --terciary: #FF5722;
 } 
 
+/* colores del root en tailwind
+usar el blanco para los textos  */
+slate-900  /* fondo oscuro (#1E1E2F) */
+
+/* Color secundario */
+cyan-500  /* secundario (#00ADB5) */
+
+/* Color terciario */
+orange-600  /* Texto terciario (#FF5722) */
+
  
 
 body {
+  
    background: var(--primary);
   color: var(--secondary); 
  

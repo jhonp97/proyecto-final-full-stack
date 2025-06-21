@@ -29,7 +29,10 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="es">
-      <body   className={`${poppins.variable} ${roboto.variable} bg-primary text-secondary font-body`}>
+      <head>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+      </head>
+      <body   className={`${poppins.variable} ${roboto.variable} bg-slate-900 text-cyan-500 `}>
         <Header/>
         <main className="min-h-screen max-w-7xl mx-auto px-4 py-6">
         {children}
