@@ -11,6 +11,8 @@
   --primary: #1E1E2F;
   --secondary: #00ADB5;
   --terciary: #FF5722;
+   --font-heading: 'Poppins', sans-serif;
+  --font-body: 'Roboto', sans-serif;
 } 
 
 /* colores del root en tailwind
@@ -26,8 +28,12 @@ orange-600  /* Texto terciario (#FF5722) */
  
 
 body {
-  
+  font-family: var(--font-body);
    background: var(--primary);
   color: var(--secondary); 
  
+}
+
+h1, h2, h3 {
+  font-family: var(--font-heading);
 }

@@ -34,7 +34,7 @@ export default function RootLayout({ children }) {
       </head>
       <body   className={`${poppins.variable} ${roboto.variable} bg-slate-900 text-cyan-500 `}>
         <Header/>
-        <main className="min-h-screen max-w-7xl mx-auto px-4 py-6">
+        <main aria-label="Contenido principal" className="min-h-screen max-w-7xl mx-auto px-4 py-6">
         {children}
 
         </main>

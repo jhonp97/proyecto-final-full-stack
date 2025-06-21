@@ -1,11 +1,52 @@
+"use client"
+
+import { useEffect, useState } from "react";
 import Image from "next/image";
 
+import AnimeCards from "@/components/AnimeCards";
+
 export default function Home() {
+  const [animes, setAnimes] = useState([])
+  // const [error, setError] = useState(null) comentado para luego hacer el loading.jsx y erros.jsx
+
+
+  // llamara a la api de jikan para traer los animes mas populares ()
+  useEffect(() => {
+    const getAnimes = async () => {
+      try {
+        const response = await fetch("https://api.jikan.moe/v4/top/anime?limit=8")
+        const data = await response.json();
+        setAnimes(data.data)
+
+      } catch (error) {
+        console.error("Error al cargar animes", error)
+      }
+    }
+    getAnimes();
+  }, [])
   return (
-   <section className="p-8 text-center bg-secondary">
-      <h2 className="text-3xl font-heading mb-4">Descubre tu próximo anime</h2>
-      <p className="text-lg">Explora nuevos títulos, géneros y más.</p>
-      
+    <section className="p-x-4 py-10 text-white bg-slate-900">
+      {/* hero */}
+      <div className="text-center mb-12">
+        <h1 className="text-4xl md:text-5xl font-bold mb-4">Descubre tu próximo anime</h1>
+        <p className="text-lg text-gray-300">Explora nuevos títulos, géneros y más.</p>
+      </div>
+
+      {/* animes populares */}
+      <div className="max-w-7xl mx-auto p-3">
+        <h2 className="text-2xl font-semibold mb-6 inline-block border-b border-cyan-500 ">
+          Animes mas populares
+        </h2>
+
+        {/* poner el loading aqui  */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 mt-6 p-3" >
+          {animes.map((anime) => (
+            <AnimeCards key={anime.mal_id} anime={anime} />
+          ))}
+        </div>
+      </div>
+
+
     </section>
   );
 }
