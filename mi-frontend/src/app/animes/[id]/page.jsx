@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation"
 import  FavoritoBtn  from "@/components/FavoritoBtn.jsx"
 import Image from "next/image";
+import ComentBox from "@/components/ComentBox";
 
 
 export default function AnimeDetail() {
@@ -19,6 +20,7 @@ export default function AnimeDetail() {
       try {
         const res = await fetch(`https://api.jikan.moe/v4/anime/${id}`);
         const data = await res.json();
+        console.log(data)
         setAnime(data.data);
       } catch (err) {
         setError("No se pudo cargar el anime.");
@@ -70,6 +72,7 @@ export default function AnimeDetail() {
           <p className="text-gray-300">{anime.synopsis}</p>
         </div>
       </div>
+      <ComentBox animeId={anime.mal_id}/>
     </section>
   );
 }

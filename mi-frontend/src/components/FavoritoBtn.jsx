@@ -30,6 +30,7 @@ const FavoritoBtn = ({animeId})=>{
         } catch(e){
             console.error("Error al aregar a favoritos: ", e)
         }
+        // console.log(isFavorite)
     };
     return(
         <button
