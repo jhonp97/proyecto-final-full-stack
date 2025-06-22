@@ -47,15 +47,15 @@ export default function AnimeDetail() {
 
   return (
     <section className="max-w-5xl  text-white">
-      <h1 className="text-3xl  ">{anime.title}</h1>
+      <h1 className="text-3xl p-5 text-center ">{anime.title}</h1>
 
-      <div className="flex flex-col md:flex-row gap-6">
+      <div className="flex flex-col justify-center items-center md:flex-row gap-6">
         <Image
           src={anime.images.jpg.large_image_url}
           alt={anime.title}
           width={300}
           height={450}
-          className="rounded"
+          className="rounded md:h-100"
         />
 
         <div className="flex flex-col gap-2">

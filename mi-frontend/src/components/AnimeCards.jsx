@@ -22,15 +22,15 @@
          <Image
            src={imgUrl}
            alt={`Imagen de ${title}`}
-           width={300}
-           height={430}
-           className="w-full h-auto object-cover"/>
+           width={200}
+           height={330}
+           className="w-full h-85 object-cover"/>
        </Link> 
 
-       <div className="p-4  flex flex-col items-center gap-3 ">
-         <h3 className="text-base font-semibold ">{title}</h3>
+       <div className="p-4  flex flex-col items-center justify-center gap-3 h-50">
+         <h3 className="text-base font-semibold  text-center h-12 ">{title}</h3>
 
-         <p className="text-sm text-gray-400">
+         <p className="text-sm text-gray-400  text-center">
              {/* terminar de mirar bien esta parte */}
              <strong>Géneros:</strong> {genres.map(g => g.name)} 
          </p>
@@ -40,7 +40,7 @@
          </p>
 
          <Link href={`/animes/${mal_id}`}>
-         <button className=" w-25 bg-cyan-900 text-white p-3 py-1 text-center rounded hover:bg-slate-700 hover:text-gray-300 transition">Ver mas</button>
+         <button className="  bg-cyan-900 text-white p-3 py-1 text-center rounded hover:bg-slate-700 hover:text-gray-300 transition">Ver mas</button>
          </Link>
        </div>
      </article>
