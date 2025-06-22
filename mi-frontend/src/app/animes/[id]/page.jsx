@@ -5,6 +5,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation"
 import  FavoritoBtn  from "@/components/FavoritoBtn.jsx"
+import Image from "next/image";
+
 
 export default function AnimeDetail() {
   const { id } = useParams(); 

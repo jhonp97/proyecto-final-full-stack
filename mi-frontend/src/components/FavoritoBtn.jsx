@@ -16,15 +16,17 @@ const FavoritoBtn = ({animeId})=>{
 
 
     // recordar esa ruta para no confundirme despues
+    // comentado para probar el funcionamiento del boton mientras hago el backend, descomentar despues
     const toggleFavorito = async ()=>{
         try{
-            const res = await fetch(`http://localhost:7000/api/favoritos`,{
-                method: "POST",
-                headers: {"Content-type": "application/json"},
-                body: JSON.stringify({animeId}),
-            });
-            const data = await res.json();
-            setIsFavorite(data.isFavorite);
+            // const res = await fetch(`http://localhost:7000/api/favoritos`,{
+            //     method: "POST",
+            //     headers: {"Content-type": "application/json"},
+            //     body: JSON.stringify({animeId}),
+            // });
+            // const data = await res.json();
+            // setIsFavorite(data.isFavorite);
+            setIsFavorite(prev => !prev); // comentar despues
         } catch(e){
             console.error("Error al aregar a favoritos: ", e)
         }
@@ -32,8 +34,9 @@ const FavoritoBtn = ({animeId})=>{
     return(
         <button
         onClick={toggleFavorito}
-        className="text-pink-700 text-3xl hover:scale-110 transition">
-            {isFavorite ? <FaHeart/> : <FaRegHeart/>}
+        className="text-pink-700  text-3xl hover:scale-110 transition">
+             {isFavorite ? <FaHeart/> : <FaRegHeart/>} 
+              {/* {isFavorite ? <FaHeart/> : "selleciona"}  */}
         </button>
     )
 
