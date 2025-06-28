@@ -42,7 +42,7 @@ const AnimeCards = ({ anime }) => {
         )}
       </div>
 
-      <div className="p-2.5  flex flex-col items-center justify-between gap-2  h-50">
+      <div className="p-2.5  flex flex-col  justify-between gap-2  h-50">
         <h3 className=" font-bold text-sm sm:text-base md:text-lg  mb-2 text-center break-words ">{title}</h3>
 
         <div className="flex flex-wrap gap-1 mb-3 items-center justify-center">
@@ -54,7 +54,7 @@ const AnimeCards = ({ anime }) => {
           ))}
         </div>
 
-        <p className="text-sm">
+        <p className="text-sm text-center">
           <strong>⭐</strong>{score ?? 'Sin calificación'}
         </p>
 
