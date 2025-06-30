@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 
 import AnimeCards from "@/components/AnimeCards";
+import Hero from "@/components/Hero";
 
 export default function Home() {
   const [animes, setAnimes] = useState([])
@@ -26,8 +27,14 @@ export default function Home() {
     getAnimes();
   }, [])
   return (
-    <section className="p-x-4 py-10 text-white bg-slate-900">
+    <section className=" text-white bg-slate-900">
       {/* hero */}
+      <Hero
+        imageSrc="/img/hero-aniverse1-2.png"
+       
+      />
+       
+
       <div className="text-center mb-12">
         <h1 className="text-4xl md:text-5xl font-bold mb-4">Descubre tu próximo anime</h1>
         <p className="text-lg text-gray-300">Explora nuevos títulos, géneros y más.</p>

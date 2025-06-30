@@ -32,23 +32,25 @@ const AnimeCards = ({ anime }) => {
           height={330}
           className="w-full h-full object-cover transition-transform duration-300 hover:scale-110" />
 
-        {/* hover para la sinopsis */}
-        {isHover && (
-          <div className="absolute inset-0 bg-slate-950 bg-opacity-80 flex items-center justify-center p-4 transition-opacity duration-300">
-            <p className="text-white text-sm text-center leading-relaxed">
-              {synopsis.substring(0, 150) ?? "Sinopsis no disponible"}...
-            </p>
-          </div>
-        )}
+        {/* hover para la sinopsis, con transicion en la opacidad */}
+        <div
+          className={`absolute inset-0 bg-slate-950 bg-opacity-80 flex items-center justify-center p-4 transition-opacity duration-300 
+          ${isHover ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+        >
+          <p className="text-white text-sm text-center leading-relaxed">
+            {synopsis?.substring(0, 150) ?? "Sinopsis no disponible"}...
+          </p>
+        </div>
+
       </div>
 
       <div className="p-2.5  flex flex-col  justify-between gap-2  h-50">
         <h3 className=" font-bold text-sm sm:text-base md:text-lg  mb-2 text-center break-words ">{title}</h3>
 
         <div className="flex flex-wrap gap-1 mb-3 items-center justify-center">
-          {genres.map((gen, i)=>(
+          {genres.map((gen, i) => (
             <span key={i}
-            className=" text-white bg-purple-600 text-xs px-2 p-1 rounded-full">
+              className=" text-white bg-purple-600 text-xs px-2 p-1 rounded-full">
               {gen.name}
             </span>
           ))}
@@ -59,7 +61,7 @@ const AnimeCards = ({ anime }) => {
         </p>
 
         <Link href={`/animes/${mal_id}`}>
-          <button className=" w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white p-2 px-4 rounded-lg transition-all duration-300 flex items-center justify-center space-x-2">Ver mas</button>
+          <button className=" w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 hover:cursor-pointer text-white p-2 px-4 rounded-lg transition-all duration-300 flex items-center justify-center space-x-2">Ver mas</button>
         </Link>
       </div>
     </article>
