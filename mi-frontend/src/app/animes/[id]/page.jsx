@@ -73,6 +73,7 @@ export default function AnimeDetail() {
                 alt={anime.title}
                 width={300}
                 height={450}
+                quality={100}
                 className="rounded-lg shadow-lg object-cover w-full md:w-64 h-100"
               />
 

@@ -30,6 +30,7 @@ const AnimeCards = ({ anime }) => {
           alt={`Imagen de ${title}`}
           width={200}
           height={330}
+          quality={100}
           className="w-full h-full object-cover transition-transform duration-300 hover:scale-110" />
 
         {/* hover para la sinopsis, con transicion en la opacidad */}
