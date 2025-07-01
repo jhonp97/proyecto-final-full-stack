@@ -43,7 +43,7 @@ const user = {
   profilePicture: "/user-avatar.png", // Imagen de perfil (opcional)
 };
   return (
-    <header className="h-25 flex justify-between items-center bg-[#1E1E2F] text-white p-5 md:p-6 shadow-lg relative z-50">
+    <header className=" sticky top-0  bg-slate-900 h-20 border-b border-slate-800 backdrop-blur-sm flex justify-between items-center  text-white p-5 md:p-6 shadow-lg z-50">
       <div className="text-2xl font-semibold">
         <Link href="/">
           {isAutenticado && user.fotoPerfil ? (
@@ -116,7 +116,7 @@ const user = {
 
       {/* enlaces desplegables */}
       {isOpen && (
-        <div className="md:hidden absolute top-[10%] left-0 flex flex-col gap-5 text-center w-full bg-[#1e1e2f] p-6 z-50">
+        <div className="md:hidden absolute top-0 left-0 flex flex-col gap-5 text-center w-full bg-slate-900 p-6 z-50">
           {links.map(({ href, label }) => (
             <Link
               key={href}

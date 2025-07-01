@@ -5,6 +5,7 @@ import Image from "next/image";
 
 import AnimeCards from "@/components/AnimeCards";
 import Hero from "@/components/Hero";
+import Link from "next/link";
 
 export default function Home() {
   const [animes, setAnimes] = useState([])
@@ -31,9 +32,9 @@ export default function Home() {
       {/* hero */}
       <Hero
         imageSrc="/img/hero-aniverse1-2.png"
-       
+
       />
-       
+
 
       <div className="text-center mb-12">
         <h1 className="text-4xl md:text-5xl font-bold mb-4">Descubre tu próximo anime</h1>
@@ -43,7 +44,9 @@ export default function Home() {
       {/* animes populares */}
       <div className="max-w-7xl mx-auto p-3">
         <h2 className="text-2xl font-semibold mb-6 inline-block border-b border-cyan-500 ">
-          Animes mas populares
+          <Link href="/animes">
+            Animes mas populares
+          </Link>
         </h2>
 
         {/* poner el loading aqui  */}

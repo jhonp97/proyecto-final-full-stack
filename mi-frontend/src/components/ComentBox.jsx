@@ -34,6 +34,13 @@ const ComentBox = ({ animeId }) => {
 
     useEffect(() => {
         obtenerReseñas();
+         setReseñas(prev => [
+    ...prev,
+    { user: { username: "anónimo" }, score: 3, coment: "comentario extra 1" },
+    { user: { username: "anónimo" }, score: 2, coment: "comentario extra 2" },
+    { user: { username: "anónimo" }, score: 5, coment: "comentario extra 3" },
+    { user: { username: "anónimo" }, score: 4, coment: "comentario extra 4" },
+  ]);
     }, [animeId])
 
     const EnviarReseña = async () => {
@@ -48,6 +55,8 @@ const ComentBox = ({ animeId }) => {
             setComentario("");
             setPuntuacion(0);
             obtenerReseñas();
+            setPagina(1);
+
         } catch (e) {
             console.error("Error al enviar la reseña: ", e)
         }
@@ -112,12 +121,19 @@ const ComentBox = ({ animeId }) => {
                         </div>
                         <p className="text-gray-300">{r.coment}</p>
                     </li>
-                ))}
-            </ul>
-            {setPagina >= 2 ? (
-                <BtnPaginacion paginaActual={pagina} totalPaginas={totalPaginas} cambiarPagina={setPagina} />
 
-            ): null}
+                ))}
+                
+
+            </ul>
+            {reseñas.length > reseñasPorPagina && (
+                <BtnPaginacion
+                
+                    paginaActual={pagina}
+                    totalPaginas={totalPaginas}
+                    cambiarPagina={setPagina}
+                />
+            )}
 
         </section>);
 }

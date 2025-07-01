@@ -13,8 +13,9 @@ import { useState } from "react";
 
 const AnimeCards = ({ anime }) => {
   // 1:
-  const { mal_id, title, images, score, genres = [], synopsis } = anime;
-  const imgUrl = images?.webp?.large_image_url
+  const { mal_id, titles, images, score, genres = [], synopsis } = anime;
+  const imgUrl = images?.webp?.large_image_url;
+  const titulo = titles.find(t=> t.type=== "Synonym")?.title || titles.find(t=> t.type=== "Default")?.title
   const [isHover, setIsHover] = useState(false)
 
 
@@ -27,7 +28,7 @@ const AnimeCards = ({ anime }) => {
         {/* 2. */}
         <Image
           src={imgUrl}
-          alt={`Imagen de ${title}`}
+          alt={`Imagen de ${titulo}`}
           width={200}
           height={330}
           quality={100}
@@ -44,27 +45,28 @@ const AnimeCards = ({ anime }) => {
         </div>
 
       </div>
+      <Link href={`/animes/${mal_id}`} className="cursor-default">
+        <div className="p-2.5  flex flex-col  justify-between gap-2  h-50">
+          <h3 className=" font-bold text-sm sm:text-base md:text-lg  mb-2 text-center break-words ">{titulo}</h3>
 
-      <div className="p-2.5  flex flex-col  justify-between gap-2  h-50">
-        <h3 className=" font-bold text-sm sm:text-base md:text-lg  mb-2 text-center break-words ">{title}</h3>
+          <div className="flex flex-wrap gap-1 mb-3 items-center justify-center">
+            {genres.map((gen, i) => (
+              <span key={i}
+                className=" text-white bg-purple-600 text-xs px-2 p-1 rounded-full">
+                {gen.name}
+              </span>
+            ))}
+          </div>
 
-        <div className="flex flex-wrap gap-1 mb-3 items-center justify-center">
-          {genres.map((gen, i) => (
-            <span key={i}
-              className=" text-white bg-purple-600 text-xs px-2 p-1 rounded-full">
-              {gen.name}
-            </span>
-          ))}
+          <p className="text-sm text-center">
+            <strong>⭐</strong>{score ?? 'Sin calificación'}
+          </p>
+
+          <Link href={`/animes/${mal_id}`}>
+            <button className=" w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 hover:cursor-pointer text-white p-2 px-4 rounded-lg transition-all duration-300 flex items-center justify-center space-x-2">Ver mas</button>
+          </Link>
         </div>
-
-        <p className="text-sm text-center">
-          <strong>⭐</strong>{score ?? 'Sin calificación'}
-        </p>
-
-        <Link href={`/animes/${mal_id}`}>
-          <button className=" w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 hover:cursor-pointer text-white p-2 px-4 rounded-lg transition-all duration-300 flex items-center justify-center space-x-2">Ver mas</button>
-        </Link>
-      </div>
+      </Link>
     </article>
   );
 };
