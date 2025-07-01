@@ -9,7 +9,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-
+import Image from "next/image";
 //Iconos de react-icons perfil y cerra sesion
 import { FaUserCircle } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
@@ -51,10 +51,18 @@ const user = {
             <Image
               src={user.fotoPerfil}
               alt={user.username}
+              width={400}
+              height={400}
               className="w-10 h-10 rounded-full object-cover"
             />
           ) : (
-            <span>Logo</span>
+            <Image
+            src="/img/aniverse-logo-removebg-preview.png"
+            alt="imagen logo de aniverse"
+            width={250}
+            height={250}
+              className="w-40 h-auto hover:scale-110 transition"
+            />
           )}
         </Link>
       </div>

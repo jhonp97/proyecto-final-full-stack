@@ -22,7 +22,7 @@ const roboto = Roboto({
 
 // para el seo
 export const metadata = {
-  title: "Mis animes",
+  title: "Aniverse",
   description: "Buscador de animes, para ver y comentar con tus amigos"
 };
 
