@@ -37,7 +37,7 @@ export const Header = () => {
 
 
   // lo uso para simular que pueda funcionar la autenticacion cambiar esto luego
-  const isAutenticado = false;
+  const isAutenticado = true;
 const user = {
   username: "jhon_dev",
   profilePicture: "/user-avatar.png", // Imagen de perfil (opcional)
@@ -86,9 +86,9 @@ const user = {
             </Link>
             <button
               onClick={handleLogout}
-              className="flex items-center gap-2 bg-red-600 hover:bg-red-700 px-3 py-1.5 rounded transition"
+              className="flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 px-3 py-1.5 rounded transition"
             >
-              <FiLogOut className="w-4 h-4" />
+              <FiLogOut className="w-4 h-auto" />
               <span>Cerrar sesión</span>
             </button>
           </>
