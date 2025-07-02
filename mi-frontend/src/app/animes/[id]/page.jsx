@@ -56,7 +56,7 @@ export default function AnimeDetail() {
       <Hero
         imageSrc={
           anime.trailer?.images?.maximum_image_url ||
-          anime.images?.jpg?.large_image_url
+          anime.images?.jpg?.large_image_url 
         }
         title={anime.title}
         subtitle={`${anime.rating} — ${anime.status}`}
