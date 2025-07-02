@@ -1,12 +1,13 @@
 const registro = () => {
-    return ( 
-        <section className="min-w-screen min-h-screen  p-6 flex flex-col items-center   text-white ">
+  return (
+    <section className="min-w-screen min-h-screen  p-6 flex flex-col items-center   text-white ">
       <h3 className="text-2xl font-semibold text-center mb-4">Registro</h3>
-       
-      <form method="POST" className="w-full max-w-md m-8 p-7 border rounded-lg shadow-lg flex flex-col gap-8 bg-slate-800">
 
-
-<div className="flex flex-col">
+      <form
+        method="POST"
+        className="w-full max-w-md m-8 p-7 border rounded-lg shadow-lg flex flex-col gap-8 bg-slate-800"
+      >
+        <div className="flex flex-col">
           <label htmlFor="text" className="mb-1 font-medium">
             Nombre:
           </label>
@@ -19,9 +20,7 @@ const registro = () => {
           />
         </div>
 
-
-
-<div className="flex flex-col">
+        <div className="flex flex-col">
           <label htmlFor="text" className="mb-1 font-medium">
             Nombre de usuario:
           </label>
@@ -60,7 +59,7 @@ const registro = () => {
           />
         </div>
 
-          <div className="flex flex-col">
+        <div className="flex flex-col">
           <label htmlFor="repeatPassword" className="mb-1 font-medium">
             Repetir Contraseña:
           </label>
@@ -81,7 +80,7 @@ const registro = () => {
         </button>
       </form>
     </section>
-     );
-}
- 
+  );
+};
+
 export default registro;
