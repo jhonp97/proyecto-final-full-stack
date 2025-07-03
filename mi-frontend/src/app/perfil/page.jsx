@@ -2,15 +2,15 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { FiEdit, FiCamera, FiBell } from "react-icons/fi"; // Importamos iconos
-import AnimeCards from "@/components/AnimeCards"; // Reutilizamos tu componente de tarjeta
+import { FiEdit, FiCamera, FiBell } from "react-icons/fi"; 
+import AnimeCards from "@/components/AnimeCards"; 
 
-// --- DATOS DE EJEMPLO (MOCK DATA) ---
-// Más adelante, estos datos vendrán de tu API
+//  DATOS DE EJEMPLO
+// estos datos  de  API
 const mockUser = {
   username: "MiUsuario123",
   bio: "Amante del shonen y la ciencia ficción.",
-  profilePicture: "/img/default-profile.png", // Una imagen por defecto en tu carpeta /public/img
+  profilePicture: "/img/default-profile.png", 
 };
 
 const mockFavorites = [
@@ -45,7 +45,7 @@ const perfil = () => {
             <h2 className="text-2xl font-bold mb-4">Mis Animes Favoritos</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               {mockFavorites.map((anime) => (
-                // Aquí necesitarás ajustar `anime` para que coincida con la prop que espera tu componente `AnimeCards`
+               
                 <AnimeCards key={anime.mal_id} anime={anime} />
               ))}
             </div>
@@ -55,21 +55,21 @@ const perfil = () => {
         return (
           <div>
             <h2 className="text-2xl font-bold mb-4">Mi Lista Privada</h2>
-            <p className="text-slate-400">Aquí se mostrarán los animes de tu lista privada.</p>
+            <p className="text-slate-400">Aquí se mostrarán los animes de lista privada.</p>
           </div>
         );
       case "reseñas":
         return (
           <div>
             <h2 className="text-2xl font-bold mb-4">Mis Reseñas</h2>
-            <p className="text-slate-400">Aquí se mostrarán las reseñas que has escrito.</p>
+            <p className="text-slate-400">Aquí se mostrarán las reseñas </p>
           </div>
         );
       case "amigos":
         return (
           <div>
             <h2 className="text-2xl font-bold mb-4">Mis Amigos</h2>
-            <p className="text-slate-400">Aquí se mostrará tu lista de amigos.</p>
+            <p className="text-slate-400">Aquí se mostrará mis amigos.</p>
           </div>
         );
       default:
@@ -79,6 +79,7 @@ const perfil = () => {
 
   return (
     <section className="max-w-7xl mx-auto p-4 md:p-8 text-white">
+      
       {/* --- BANNER DEL PERFIL --- */}
       <div className="bg-slate-800 rounded-lg p-6 flex flex-col sm:flex-row items-center gap-6">
         <div className="relative">
