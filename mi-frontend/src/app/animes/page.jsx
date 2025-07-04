@@ -14,16 +14,13 @@ const Animes = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-
-
-
   // const [filtro, setFiltro] = useState("all")
 
   const [filtro, setFiltro] = useState({
     name: "", //
     status: "", //  completado
     genres: "", // número de género
-    order_by: "score", // para ordenar por puntuación
+    order_by: "", // para ordenar por puntuación
     sort: "desc", // orden descendente
   });
 
@@ -39,8 +36,9 @@ const Animes = () => {
 
         // Este bloque añade dinámicamente todos los filtros que no estén vacíos
         Object.entries(filtro).forEach(([key, value]) => {
-          if (value) { // si 'value' no es una cadena vacía, null o undefined
-            const paramKey = key === 'name' ? 'q' : key; // Jikan usa 'q' para el nombre
+          if (value) {
+            // si 'value' no es una cadena vacía, null o undefined
+            const paramKey = key === "name" ? "q" : key; // la api de Jikan usa "q" para el nombre
             params.append(paramKey, value);
           }
         });
@@ -56,8 +54,6 @@ const Animes = () => {
 
         setAnimes(data.data);
         setTotalPages(data.pagination.last_visible_page);
-
-
       } catch (error) {
         console.error(`No se pudo cargar el archivo, error:`, error);
         setError(error.message);
@@ -69,36 +65,37 @@ const Animes = () => {
     traerAnimes();
   }, [page, filtro]);
 
-  useEffect(() => {
-    console.log("pagina actual es: ", page)
-  setPage(1);
-}, [filtro]);
-
+  // esta funcion es para que no me salga error en la pagina ya que la api no me permite hacer mas de dos peticiones por segundo
+  const handleFiltroChange = (nuevoFiltro) => {
+    setFiltro(nuevoFiltro);
+    setPage(1);
+  };
 
   // const cards = animes.map((a) => <AnimeCards key={animes.mal_id} anime={animes} />);
 
-  const cards = (<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 mt-6 p-3" >
-    {animes.map((anime) => (
-      <AnimeCards key={anime.mal_id} anime={anime} />
-    ))}
-  </div>)
-
-
+  const cards = (
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 mt-6 p-3">
+      {animes.map((anime) => (
+        <AnimeCards key={anime.mal_id} anime={anime} />
+      ))}
+    </div>
+  );
 
   return (
-    <section className="animes">
-      <h2 className="animes-title">Animes</h2>
+    <section className="flez flex-col items-center justify-center">
+      <h2 className="font-bold text-sm md:text-2xl xl:text-5xl text-center text-white p-5 m-3">Animes</h2>
 
-     
-      <FiltroAnimes filtro={filtro} setFiltro={setFiltro} />
-
-
+      <FiltroAnimes filtro={filtro} setFiltro={handleFiltroChange} />
 
       <section className="max-w-7xl mx-auto p-3">
         {loading ? <p>Cargando...</p> : cards}
         {error && <p style={{ color: "red" }}>Error: {error}</p>}
       </section>
-      <BtnPaginacion paginaActual={page} totalPaginas={totalPages} cambiarPagina={setPage} />
+      <BtnPaginacion
+        paginaActual={page}
+        totalPaginas={totalPages}
+        cambiarPagina={setPage}
+      />
     </section>
   );
 };

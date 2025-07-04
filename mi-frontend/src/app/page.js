@@ -36,9 +36,9 @@ export default function Home() {
       />
 
 
-      <div className="text-center mb-12">
-        <h1 className="text-4xl md:text-5xl font-bold mb-4">Descubre tu próximo anime</h1>
-        <p className="text-lg text-gray-300">Explora nuevos títulos, géneros y más.</p>
+      <div className="text-center mb-12 p-5">
+        <h1 className="text-4xl md:text-5xl font-bold mb-4 p-2">Descubre tu próximo anime</h1>
+        <p className="text-lg text-gray-300 p-3">Explora nuevos títulos, géneros y más.</p>
       </div>
 
       {/* animes populares */}

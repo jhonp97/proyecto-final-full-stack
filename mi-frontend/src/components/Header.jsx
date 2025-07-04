@@ -13,20 +13,28 @@ import Image from "next/image";
 //Iconos de react-icons perfil y cerra sesion
 import { FaUserCircle } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
+import { usePathname,  useRouter } from "next/navigation";
+
 // este el componente header de la pagina
 
 export const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
-
+  const [logout, setLogout] = useState(false)
+  const pathname = usePathname();
+  const router = useRouter()
 
   const handleClick = () => {
     setIsOpen(false);
   };
 
   const handleLogout = () => {
+
+    
     // luego poner aqui la logica del back para eliminar el token y limpiar todo
     console.log("se ha cerrado sesion");
     setIsOpen(false);
+    setLogout(true)
+    router.push("/login")
   };
 
   // enlances siempre visibles
@@ -35,13 +43,12 @@ export const Header = () => {
     { href: "/animes", label: "Animes" },
   ];
 
-
   // lo uso para simular que pueda funcionar la autenticacion cambiar esto luego
   const isAutenticado = true;
-const user = {
-  username: "jhon_dev",
-  profilePicture: "/user-avatar.png", // Imagen de perfil (opcional)
-};
+  const user = {
+    username: "jhon_dev",
+    profilePicture: "/user-avatar.png", // Imagen de perfil (opcional)
+  };
   return (
     <header className=" sticky top-0  bg-slate-900 h-20 border-b border-slate-800 backdrop-blur-sm flex justify-between items-center  text-white p-5 md:p-6 shadow-lg z-50">
       <div className="text-2xl font-semibold">
@@ -57,10 +64,10 @@ const user = {
             />
           ) : (
             <Image
-            src="/img/aniverse-logo-removebg-preview.png"
-            alt="imagen logo de aniverse"
-            width={250}
-            height={250}
+              src="/img/aniverse-logo-removebg-preview.png"
+              alt="imagen logo de aniverse"
+              width={250}
+              height={250}
               className="w-40 h-auto hover:scale-110 transition"
             />
           )}
@@ -72,7 +79,11 @@ const user = {
           <Link
             key={href}
             href={href}
-            className="hover:text-[#00adb5]  transition"
+            className={`transition ${
+              pathname === href
+                ? "text-cyan-400 font-semibold border-b-2 border-cyan-500"
+                : "hover:text-[#00adb5] text-white"
+            }`}
           >
             {label}
           </Link>
@@ -81,23 +92,43 @@ const user = {
         {/* mostrar enlace dependiedno si estoy en cesion o no */}
         {isAutenticado ? (
           <>
-            <Link href="/perfil" className="hover:text-[#00adb5] transition">
+            <Link
+              href="/perfil"
+              className={`transition ${
+                pathname === "/perfil"
+                  ? "text-cyan-400 font-semibold border-b-2 border-cyan-500"
+                  : "hover:text-[#00adb5] text-white"
+              }`}
+            >
               Perfil
             </Link>
             <button
               onClick={handleLogout}
-              className="flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 px-3 py-1.5 rounded transition"
-            >
+              className="flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 px-3 py-1.5 rounded transition">
               <FiLogOut className="w-4 h-auto" />
               <span>Cerrar sesión</span>
             </button>
           </>
         ) : (
           <>
-            <Link href="/login" className="hover:text-[#00adb5] transition">
+            <Link
+              href="/login"
+              className={`transition ${
+                pathname === "/login"
+                  ? "text-cyan-400 font-semibold border-b-2 border-cyan-500"
+                  : "hover:text-[#00adb5] text-white"
+              }`}
+            >
               Login
             </Link>
-            <Link href="/registro" className="hover:text-[#00adb5] transition">
+            <Link
+              href="/registro"
+              className={`transition ${
+                pathname === "/registro"
+                  ? "text-cyan-400 font-semibold border-b-2 border-cyan-500"
+                  : "hover:text-[#00adb5] text-white"
+              }`}
+            >
               Registro
             </Link>
           </>
@@ -130,7 +161,11 @@ const user = {
 
           {isAutenticado ? (
             <>
-              <Link href="/perfil" onClick={handleClick} className="hover:text-[#00adb5] transition">
+              <Link
+                href="/perfil"
+                onClick={handleClick}
+                className="hover:text-[#00adb5] transition"
+              >
                 Mi Perfil
               </Link>
               <button
@@ -143,10 +178,18 @@ const user = {
             </>
           ) : (
             <>
-              <Link href="/login" onClick={handleClick} className="hover:text-[#00adb5] transition">
+              <Link
+                href="/login"
+                onClick={handleClick}
+                className="hover:text-[#00adb5] transition"
+              >
                 Login
               </Link>
-              <Link href="/registro" onClick={handleClick} className="hover:text-[#00adb5] transition">
+              <Link
+                href="/registro"
+                onClick={handleClick}
+                className="hover:text-[#00adb5] transition"
+              >
                 Registro
               </Link>
             </>
