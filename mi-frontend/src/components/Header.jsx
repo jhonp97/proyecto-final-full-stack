@@ -108,15 +108,15 @@ const user = {
 
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="text-white text-3xl p-2 w-20  md:hidden"
+        className="text-white text-3xl p-2 w-20 z-99 md:hidden"
       >
         {/* alterno entre abrir o cerrar */}
-        <span className="material-icons">{isOpen ? "close" : "menu"}</span>
+        <span className="material-icons ">{isOpen ? "close" : "menu"}</span>
       </button>
 
       {/* enlaces desplegables */}
       {isOpen && (
-        <div className="md:hidden absolute top-0 left-0 flex flex-col gap-5 text-center w-full bg-slate-900 p-6 z-50">
+        <div className="md:hidden fixed top-0 left-0 flex flex-col gap-5 text-center w-full bg-slate-900 p-6 z-50">
           {links.map(({ href, label }) => (
             <Link
               key={href}
@@ -130,7 +130,7 @@ const user = {
 
           {isAutenticado ? (
             <>
-              <Link href="/profile" onClick={handleClick} className="hover:text-[#00adb5] transition">
+              <Link href="/perfil" onClick={handleClick} className="hover:text-[#00adb5] transition">
                 Mi Perfil
               </Link>
               <button

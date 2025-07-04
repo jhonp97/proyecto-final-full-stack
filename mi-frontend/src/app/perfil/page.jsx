@@ -10,7 +10,7 @@ import AnimeCards from "@/components/AnimeCards";
 const mockUser = {
   username: "MiUsuario123",
   bio: "Amante del shonen y la ciencia ficción.",
-  profilePicture: "/img/default-profile.png", 
+  profilePicture: "/img/logo-eye.png", 
 };
 
 const mockFavorites = [
