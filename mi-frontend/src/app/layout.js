@@ -1,5 +1,5 @@
 
-
+import { AuthProvider } from '@/context/AuthContext';
 import { Poppins, Roboto } from 'next/font/google'; // importo las fuentes
 
 import "./globals.css";
@@ -33,12 +33,13 @@ export default function RootLayout({ children }) {
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
       </head>
       <body   className={`${poppins.variable} ${roboto.variable} bg-slate-900 text-cyan-500 `}>
-        <Header/>
-        <main aria-label="Contenido principal" className="min-h-screen w-full overflow-x-hidden ">
-        {children}
-
-        </main>
-        <Footer/>
+        <AuthProvider>
+          <Header/>
+          <main aria-label="Contenido principal" className="min-h-screen w-full overflow-x-hidden ">
+          {children}
+          </main>
+          <Footer/>
+        </AuthProvider>
       </body>
     </html>
   );

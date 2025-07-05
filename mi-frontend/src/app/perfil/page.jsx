@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { FiEdit, FiCamera, FiBell } from "react-icons/fi"; 
 import AnimeCards from "@/components/AnimeCards"; 
+import EditarPerfil from "@/components/EditarPerfil";
 
 //  DATOS DE EJEMPLO
 // estos datos  de  API
@@ -35,6 +36,9 @@ const mockFavorites = [
 
 
 const perfil = () => {
+  const [favoritos, setFavoritos]= useState([])
+  const  [reviews, setReviews] = useState([])
+  const [editarPerfil, setEditarPerfil] = useState(false)
    const [activeTab, setActiveTab] = useState("favoritos"); // Estado para controlar la pestaña activa
 
   const renderContent = () => {
@@ -97,7 +101,8 @@ const perfil = () => {
         <div className="text-center sm:text-left">
           <h1 className="text-3xl font-bold">{mockUser.username}</h1>
           <p className="text-slate-400 mt-1">{mockUser.bio}</p>
-          <button className="mt-4 flex items-center gap-2 bg-slate-700 px-4 py-2 rounded-md text-sm hover:bg-slate-600 transition-colors duration-200">
+          <button className="mt-4 flex items-center gap-2 bg-slate-700 px-4 py-2 rounded-md text-sm hover:bg-slate-600 transition-colors duration-200"
+          onClick={()=>setEditarPerfil(true)}>
             <FiEdit />
             Editar Perfil
           </button>
@@ -144,10 +149,17 @@ const perfil = () => {
         </button>
       </div>
 
-      {/* --- CONTENIDO DE LA PESTAÑA ACTIVA --- */}
+      {/* --- CONTENIDO DE PESTAÑA ACTIVA --- */}
       <div>
         {renderContent()}
       </div>
+
+      {editarPerfil && (
+        <EditarPerfil
+          user={mockUser} 
+          onClose={() => setEditarPerfil(false)} 
+        />
+      )}
     </section>
      );
 }
