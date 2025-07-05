@@ -3,6 +3,7 @@
 import AnimeCards from "@/components/AnimeCards";
 import FiltroAnimes from "@/components/FiltroAnimes";
 import BtnPaginacion from "@/components/BtnPaginacion";
+import Loading from "@/components/Loading";
 
 import { useState, useEffect } from "react";
 
@@ -11,7 +12,7 @@ const Animes = () => {
   const [totalPages, setTotalPages] = useState(1);
 
   const [animes, setAnimes] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   // const [filtro, setFiltro] = useState("all")
@@ -27,7 +28,7 @@ const Animes = () => {
   useEffect(() => {
     const traerAnimes = async () => {
       try {
-        setLoading(true);
+       
         setError(null);
 
         const params = new URLSearchParams({
@@ -87,8 +88,8 @@ const Animes = () => {
 
       <FiltroAnimes filtro={filtro} setFiltro={handleFiltroChange} />
 
-      <section className="max-w-7xl mx-auto p-3">
-        {loading ? <p>Cargando...</p> : cards}
+      <section className="max-w-7xl mx-auto p-3 w-full">
+        {loading ? <Loading/>: cards}
         {error && <p style={{ color: "red" }}>Error: {error}</p>}
       </section>
       <BtnPaginacion

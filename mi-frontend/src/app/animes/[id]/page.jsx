@@ -8,6 +8,7 @@ import FavoritoBtn from "@/components/FavoritoBtn.jsx"
 import Image from "next/image";
 import ComentBox from "@/components/ComentBox";
 import Hero from "@/components/Hero";
+import Loading from "@/components/Loading";
 
 
 export default function AnimeDetail() {
@@ -35,9 +36,7 @@ export default function AnimeDetail() {
 
   if (loading) {
     return (
-      <section className="p-10 text-center text-white">
-        <p className="text-lg text-gray-300">Cargando anime...</p>
-      </section>
+      <Loading/>
     );
   }
 
