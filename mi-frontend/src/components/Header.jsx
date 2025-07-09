@@ -44,7 +44,7 @@ export const Header = () => {
   ];
 
   // lo uso para simular que pueda funcionar la autenticacion cambiar esto luego
-  const isAutenticado = true;
+  const isAutenticado = false;
   const user = {
     username: "jhon_dev",
     profilePicture: "/user-avatar.png", // Imagen de perfil (opcional)
