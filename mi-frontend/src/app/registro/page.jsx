@@ -35,7 +35,7 @@ const registro = () => {
     setLoading(true)
 
     try{
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
       const response = await fetch(`${apiUrl}/auth/register`, {
         method: "POST",
         headers:{ "Content-Type": "application/json"},
