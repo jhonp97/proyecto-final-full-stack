@@ -11,29 +11,28 @@ import Link from "next/link";
 import { useState } from "react";
 import Image from "next/image";
 //Iconos de react-icons perfil y cerra sesion
-import { FaUserCircle } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
+
+import { useAuth } from "@/context/AuthContext";
 import { usePathname,  useRouter } from "next/navigation";
 
 // este el componente header de la pagina
 
 export const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [logout, setLogout] = useState(false)
+  // const [logout, setLogout] = useState(false)
   const pathname = usePathname();
   const router = useRouter()
 
-  const handleClick = () => {
-    setIsOpen(false);
-  };
+  const {user, logout, loading} = useAuth();
 
+  const handleClick = () => {setIsOpen(false);};
+
+  // esta funcion llama al logout del contexto que limpia todo
   const handleLogout = () => {
-
-    
-    // luego poner aqui la logica del back para eliminar el token y limpiar todo
+    logout()
     console.log("se ha cerrado sesion");
     setIsOpen(false);
-    setLogout(true)
     router.push("/login")
   };
 
@@ -43,17 +42,52 @@ export const Header = () => {
     { href: "/animes", label: "Animes" },
   ];
 
-  // lo uso para simular que pueda funcionar la autenticacion cambiar esto luego
-  const isAutenticado = true;
-  const user = {
-    username: "jhon_dev",
-    profilePicture: "/user-avatar.png", // Imagen de perfil (opcional)
-  };
+  // lo uso para simular que pueda funcionar la autenticacion cambiar esto luego al hacer el backend
+  // const isAutenticado = true;
+  // const user = {
+  //   username: "jhon_dev",
+  //   profilePicture: "/avatar1.png", // imagen de perfil 
+ 
+
+  
+  // funcion para los enlaces  para evitar que se repitan
+  const NavLinks = ({ isMobile = false }) => (
+    <>
+      <Link href="/" onClick={isMobile ? handleClick : undefined} className={`transition ${pathname === "/" ? "text-cyan-400 font-semibold  border-b-2"  : "hover:text-cyan-400"}`}>
+        Inicio
+      </Link>
+      <Link href="/animes" onClick={isMobile ? handleClick : undefined} className={`transition ${pathname === "/animes" ? "text-cyan-400 font-semibold  border-b-2"  : "hover:text-cyan-400"}`}>
+        Animes
+      </Link>
+
+      {user ? (
+        <>
+          <Link href="/perfil" onClick={isMobile ? handleClick : undefined} className={`transition ${pathname === "/perfil" ? "text-cyan-400 font-semibold  border-b-2"  : "hover:text-cyan-400"}`}>
+            Mi Perfil
+          </Link>
+          <button onClick={handleLogout} className="flex items-center cursor-pointer gap-2 text-red-500 hover:text-red-400 transition">
+            <FiLogOut />
+            <span >Cerrar sesión</span>
+          </button>
+        </>
+      ) : (
+        <>
+          <Link href="/login" onClick={isMobile ? handleClick : undefined} className={`transition ${pathname === "/login" ? "text-cyan-400 font-semibold  border-b-2" : "hover:text-cyan-400"}`}>
+            Login
+          </Link>
+          <Link href="/registro" onClick={isMobile ? handleClick : undefined} className={`transition ${pathname === "/registro" ? "text-cyan-400 font-semibold  border-b-2" : "hover:text-cyan-400"}`}>
+            Registro
+          </Link>
+        </>
+      )}
+    </>
+  );
+
   return (
     <header className=" sticky top-0  bg-slate-900 h-20 border-b border-slate-800 backdrop-blur-sm flex justify-between items-center  text-white p-5 md:p-6 shadow-lg z-50">
       <div className="text-2xl font-semibold">
         <Link href="/">
-          {isAutenticado && user.fotoPerfil ? (
+          {user && user.fotoPerfil ? (
             // mostrar foto de perfil cuando inicio sesion
             <Image
               src={user.fotoPerfil}
@@ -74,126 +108,21 @@ export const Header = () => {
         </Link>
       </div>
 
-      <nav className="hidden md:flex justify-around w-xl font-medium text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl">
-        {links.map(({ href, label }) => (
-          <Link
-            key={href}
-            href={href}
-            className={`transition ${
-              pathname === href
-                ? "text-cyan-400 font-semibold border-b-2 border-cyan-500"
-                : "hover:text-[#00adb5] text-white"
-            }`}
-          >
-            {label}
-          </Link>
-        ))}
 
-        {/* mostrar enlace dependiedno si estoy en cesion o no */}
-        {isAutenticado ? (
-          <>
-            <Link
-              href="/perfil"
-              className={`transition ${
-                pathname === "/perfil"
-                  ? "text-cyan-400 font-semibold border-b-2 border-cyan-500"
-                  : "hover:text-[#00adb5] text-white"
-              }`}
-            >
-              Perfil
-            </Link>
-            <button
-              onClick={handleLogout}
-              className="flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 px-3 py-1.5 rounded transition">
-              <FiLogOut className="w-4 h-auto" />
-              <span>Cerrar sesión</span>
-            </button>
-          </>
-        ) : (
-          <>
-            <Link
-              href="/login"
-              className={`transition ${
-                pathname === "/login"
-                  ? "text-cyan-400 font-semibold border-b-2 border-cyan-500"
-                  : "hover:text-[#00adb5] text-white"
-              }`}
-            >
-              Login
-            </Link>
-            <Link
-              href="/registro"
-              className={`transition ${
-                pathname === "/registro"
-                  ? "text-cyan-400 font-semibold border-b-2 border-cyan-500"
-                  : "hover:text-[#00adb5] text-white"
-              }`}
-            >
-              Registro
-            </Link>
-          </>
-        )}
+        {/* mostrar enlaces dependiedno si estoy en cesion o no */}
+      <nav className="hidden md:flex justify-around w-xl font-medium text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl">
+        {!loading && <NavLinks />}
       </nav>
 
-      {/* menu hamburguesa para pantallas pequeñas */}
-
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="text-white text-3xl p-2 w-20 z-99 md:hidden"
-      >
-        {/* alterno entre abrir o cerrar */}
-        <span className="material-icons ">{isOpen ? "close" : "menu"}</span>
+      {/* menu hamburguesa*/}
+      <button onClick={() => setIsOpen(!isOpen)} className="text-white text-3xl md:hidden z-50">
+        <span className="material-icons">{isOpen ? "close" : "menu"}</span>
       </button>
 
-      {/* enlaces desplegables */}
+      {/*menu para movil*/}
       {isOpen && (
-        <div className="md:hidden fixed top-0 left-0 flex flex-col gap-5 text-center w-full bg-slate-900 p-6 z-50">
-          {links.map(({ href, label }) => (
-            <Link
-              key={href}
-              href={href}
-              className="hover:text-[#00adb5]  transition"
-              onClick={handleClick}
-            >
-              {label}
-            </Link>
-          ))}
-
-          {isAutenticado ? (
-            <>
-              <Link
-                href="/perfil"
-                onClick={handleClick}
-                className="hover:text-[#00adb5] transition"
-              >
-                Mi Perfil
-              </Link>
-              <button
-                onClick={handleLogout}
-                className="flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 px-3 py-2 rounded transition"
-              >
-                <FiLogOut className="w-4 h-4" />
-                <span>Cerrar sesión</span>
-              </button>
-            </>
-          ) : (
-            <>
-              <Link
-                href="/login"
-                onClick={handleClick}
-                className="hover:text-[#00adb5] transition"
-              >
-                Login
-              </Link>
-              <Link
-                href="/registro"
-                onClick={handleClick}
-                className="hover:text-[#00adb5] transition"
-              >
-                Registro
-              </Link>
-            </>
-          )}
+        <div className="md:hidden absolute top-20 left-0 w-full bg-slate-900 flex flex-col items-center justify-center gap-8 text-2xl z-40 py-10">
+           {!loading && <NavLinks isMobile={true} />}
         </div>
       )}
     </header>
