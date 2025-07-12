@@ -11,7 +11,7 @@ const registro = () => {
     password: "",
     repeatPassword: "",
   });
-  const [error, setError] = useState("null");
+  const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
@@ -42,6 +42,7 @@ const registro = () => {
         // envuamos los datos del formulario
         body: JSON.stringify({
           username: formData.username, 
+          email :formData.email,
           password: formData.password,
         })
       });

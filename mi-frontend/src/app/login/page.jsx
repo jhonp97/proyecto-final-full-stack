@@ -11,7 +11,7 @@ const Login = () => {
     email: "",
     password: ""
   });
-  const [error, setError] = useState("null");
+  const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();

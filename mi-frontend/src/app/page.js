@@ -45,7 +45,7 @@ export default function Home() {
       <div className="max-w-7xl mx-auto p-3">
         <h2 className="text-2xl font-semibold mb-6 inline-block border-b border-cyan-500 ">
           <Link href="/animes">
-            Animes mas populares
+            Animes más populares
           </Link>
         </h2>
 
