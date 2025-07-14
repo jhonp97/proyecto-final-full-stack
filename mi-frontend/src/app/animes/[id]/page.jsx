@@ -109,7 +109,7 @@ export default function AnimeDetail() {
 
                 {/* boton de favoritos */}
                 <div className="bg-gray-700 p-2 rounded-lg inline-flex items-center">
-                  <FavoritoBtn animeId={anime.mal_id} />
+                  <FavoritoBtn anime={anime} />
                 </div>
               </div>
             </div>

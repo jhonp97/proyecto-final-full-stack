@@ -35,8 +35,31 @@ export function AuthProvider({ children }) {
     setToken(null);
   };
 
+  const updateData= async()=>{
+    const currenToken= localStorage.getItem("authToken")
+    if(!currenToken)return
+    try{
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
+      const response = await fetch(`${apiUrl}/auth/me`, {
+        headers: { 'Authorization': `Bearer ${currentToken}` }
+      });
+      const data = await response.json()
+      if(response.ok){
+        setUser(data.data) //para actualizar el usuario
+        // console.log(data)
+        // console.log(user)
+      }
+    } catch(error){
+      console.log("error al actualizar los datos del usuario: ", error)
+    }
+  }
+
+  useEffect(()=>{
+    // al cargar la pagina uso la funcion de actualizar 
+    updateData()
+  },[])
   return (
-    <AuthContext.Provider value={{ user, token, login, logout, loading }}>
+    <AuthContext.Provider value={{ user, token, login, logout, loading, updateData }}>
       {children}
     </AuthContext.Provider>
   );

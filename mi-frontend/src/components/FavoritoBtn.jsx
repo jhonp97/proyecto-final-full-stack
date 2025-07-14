@@ -22,31 +22,44 @@ const FavoritoBtn = ({anime})=>{
     
 
     
-    // recordar esa ruta para no confundirme despues
-    // comentado para probar el funcionamiento del boton mientras hago el backend, descomentar despues
     const toggleFavorito = async ()=>{
         if (!token) {
-            alert("Debes iniciar sesión para añadir a favoritos.");
+            alert("Debes iniciar sesión para añadir a favoritos."); //mensaje de que debe estar registardo para agregar a fav
             return;
         }
+
+            const titulo = anime.titles?.find(t => t.type === "Default")?.title || anime.title;
+            const imageUrl = anime.images?.webp?.large_image_url;
             const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
-        try{
+        
+            // aqui depende de que si el esatdo actual es true (si ya esta en favoritos) se elimina al hacer click (DELETE), y si no, lo agrego con POST
+            const metodo = isFavorite? "DELETE" : "POST";
+            
+            const ruta= isFavorite? `${apiUrl}/favoritos/${anime.mal_id}`//quito el anime
+             : `${apiUrl}/favoritos`// lo agrego
+            try{
              const res = await fetch(`${apiUrl}/favoritos`,{
                 method: "POST",
                 headers: {"Content-type": "application/json",
                     "Authorization": `Bearer ${token}`},
-                body: JSON.stringify({
+                body: metodo === "POST" ? JSON.stringify({
                     animeId: anime.mal_id,
-                    title: anime.title, 
-                    image: anime.images.webp.large_image_url
-                }),
+                    title: titulo, 
+                    image: imageUrl
+                }): null,
              });
 
-             if(!response.ok)throw new Error("error al añadir a favoritos")
-            setIsFavorite(true)
-                
+             if(!response.ok){
+                throw new Error(`error al ${isFavorite ? 'eliminar' : 'añadir'} el favorito`)
+             }
+                setIsFavorite(prev=>!prev) // actualizo el estado del boton
+                // actualizar los datos del usuario
+                if(updateData){
+                    updateData()
+                }
+
         } catch(e){
-            console.error("Error al aregar a favoritos: ", e)
+            console.error("Error al agregar a favoritos: ", e)
         }
         // console.log(isFavorite)
     };
