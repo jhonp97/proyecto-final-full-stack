@@ -19,7 +19,7 @@ const EditarPerfil = ({ user, onClose, onProfileUpdate }) => {
 
     try {
       // variable de entorno para la URL de la api (Fijarme que todo este CORRECTO despues)
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1/perfil";
       const response = await fetch(`${apiUrl}/users/profile`, { // Ruta completa
         method: "PUT",
         headers: {

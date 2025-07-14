@@ -18,7 +18,8 @@ export default function Home() {
       try {
         const response = await fetch("https://api.jikan.moe/v4/top/anime?limit=8")
         const data = await response.json();
-        // console.log(data)
+         console.log(`mi data es ${data}`)
+         console.log(`mi data.data es ${data.data}`);
         setAnimes(data.data)
 
       } catch (error) {

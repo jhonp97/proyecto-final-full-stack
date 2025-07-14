@@ -10,11 +10,16 @@ import { useState } from "react";
 
 const AnimeCards = ({ anime }) => {
   // 1:
-  const { mal_id, titles, images, score, genres = [], synopsis } = anime;
-  const imgUrl = images?.webp?.large_image_url;
+  const { mal_id, titles, title, images, image, 
+    score = anime.score ?? "Sin calificación", 
+    genres = anime.genres ?? [], 
+    synopsis= anime.synopsis ?? "Haz clic en 'Ver más' para ver los detalles." } = anime;
+
+  const imgUrl = images?.webp?.large_image_url || image;
+
   const titulo =
     titles.find((t) => t.type === "Synonym")?.title ||
-    titles.find((t) => t.type === "Default")?.title;
+    titles.find((t) => t.type === "Default")?.title || title;
   const [isHover, setIsHover] = useState(false);
 
   return (
@@ -70,11 +75,11 @@ const AnimeCards = ({ anime }) => {
             {score ?? "Sin calificación"}
           </p>
 
-          <Link href={`/animes/${mal_id}`}>
+        
             <button className=" w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 hover:cursor-pointer text-white p-2 px-4 rounded-lg transition-all duration-300 flex items-center justify-center space-x-2">
               Ver mas
             </button>
-          </Link>
+          
         </div>
       </Link>
     </article>

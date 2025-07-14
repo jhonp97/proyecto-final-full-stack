@@ -28,11 +28,11 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="es">
+    <html lang="es" className={`${poppins.variable} ${roboto.variable}`}>
       <head>
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
       </head>
-      <body   className={`${poppins.variable} ${roboto.variable} bg-slate-900 text-cyan-500 `}>
+      <body   className={` bg-slate-900 text-cyan-500 `}>
         <AuthProvider>
           <Header/>
           <main aria-label="Contenido principal" className="min-h-screen w-full overflow-x-hidden ">

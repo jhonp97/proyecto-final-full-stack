@@ -72,11 +72,32 @@ const perfil = () => {
     }
   }, [token]);
 
+  useEffect(() => {
+  const fetchFavoritos = async () => {
+    if (!user?.favoritos?.length) return;
+
+    try {
+      const detallados = await Promise.all(
+        user.favoritos.map(async (fav) => {
+          const res = await fetch(`https://api.jikan.moe/v4/anime/${fav.animeId}`);
+          const data = await res.json();
+          return data.data;
+        })
+      );
+      setFavoritos(detallados.filter(Boolean));
+    } catch (error) {
+      console.error("Error al obtener detalles de favoritos:", error);
+    }
+  };
+
+  fetchFavoritos();
+}, [user?.favoritos]);
+
   const renderContent = () => {
     switch (activeTab) {
       case "favoritos":
         // se verifica que el usuario y la lista estén
-        if(!user?.favoritos || user.favoritos.length === 0){
+        if(!favoritos || favoritos.length === 0){
         return (
           <div>
             <h2 className="text-2xl font-bold mb-4">Mis Animes Favoritos</h2>
@@ -88,21 +109,21 @@ const perfil = () => {
           <h2 className="text-2xl font-bold mb-4">Mis Animes Favoritos</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {/*uso el map sobre user.favoritos para mostrar el contenido*/}
-            {user.favoritos.map((fav) => {
-              
+            {favoritos.map((anime) => (
+              <AnimeCards key={anime.mal_id} anime={anime} />
               //adapto la estructura para que coincida con la de mi componente AnimeCards
-              const cardFavorito = {
-                mal_id: fav.animeId,
-                titles: [{ type: "Default", title: fav.title }],
-                images: { webp: { large_image_url: fav.image } },
-                // añado valores por defecto para otras props que el Card pueda necesitar
-                score: fav.score, 
-                genres: [],
-                synopsis: "Haz clic en 'Ver más' para ver los detalles."
-              };
+              // const cardFavorito = {
+              //   mal_id: fav.animeId,
+              //   titles: [{ type: "Default", title: fav.title }],
+              //   images: { webp: { large_image_url: fav.image } },
+              //   // añado valores por defecto para otras props que el Card pueda necesitar
+              //   score: fav.score, 
+              //   genres: [],
+              //   synopsis: "Haz clic en 'Ver más' para ver los detalles."
+              // };
 
-              return <AnimeCards key={fav.animeId} anime={cardFavorito} />;
-            })}
+              // return <AnimeCards key={fav.animeId} anime={cardFavorito} />;
+            ))}
           </div>
         </div>
       )
