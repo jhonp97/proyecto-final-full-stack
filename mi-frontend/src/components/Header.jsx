@@ -26,6 +26,12 @@ export const Header = () => {
 
   const {user, logout, loading} = useAuth();
 
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  const rutaBackend = apiUrl.replace("/api/v1", ""); //remuevo para obtener la ruta del back
+  // url para la imagen si se sube, si no usa la que es por defecto
+  const fotoPerfilSrc = user?.fotoPerfil?.startsWith("/uploads") // aqui uso startsWith para verificar que la ruta empieza con /uploads
+    ? `${rutaBackend}${user.fotoPerfil}` : user?.fotoPerfil || "/img/avatar1.png";
+
   const handleClick = () => {setIsOpen(false);};
 
   // esta funcion llama al logout del contexto que limpia todo
@@ -90,8 +96,8 @@ export const Header = () => {
           {user && user.fotoPerfil ? (
             // mostrar foto de perfil cuando inicio sesion
             <Image
-              src={user.fotoPerfil}
-              alt={user.username}
+              src={fotoPerfilSrc}
+              alt={`Foto de perfil de ${user?.username || "usuario"} `}
               width={400}
               height={400}
               className="w-10 h-10 rounded-full object-cover"

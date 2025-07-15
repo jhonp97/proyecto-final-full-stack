@@ -23,25 +23,31 @@ const ComentBox = ({ animeId }) => {
     // CAMBIAR ESTO CUANDO HAGA EL BACKEND
     const obtenerReseñas = async () => {
         try {
-            const response = await fetch(`http://localhost:7000/api/reviews/${animeId}`);
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
+
+            const response = await fetch(`${apiUrl}/reviews/${animeId}`);
             const data = await response.json();
-            setReseñas(data)
-            // console.log(data)
+            if (response.ok) { // reviso que la respuesta sea correcta
+
+                if(Array.isArray(data.data)){
+                    setReseñas(data.data);
+                    // console.log("reseñas obtenidas: ", data.data)
+                }else{
+                    setReseñas([])// si no es un array lo pongo vacio
+                }
+            }else{
+                console.error("Error al obtener reseñas: ", data.msg );
+                setReseñas([]); // si hay error limpio el estado
+            }
         } catch (e) {
             console.error("Error al obtener las reseñas: ", e)
+            setReseñas([]); // si hay error limpio el estado
         }
     };
 
-    useEffect(() => {
+    useEffect(() => { // al cargar el componente obtengo las reseñas
         obtenerReseñas();
-         setReseñas(prev => [
-    ...prev,
-    { user: { username: "anónimo" }, score: 3, coment: "comentario extra 1" },
-    { user: { username: "anónimo" }, score: 2, coment: "comentario extra 2" },
-    { user: { username: "anónimo" }, score: 5, coment: "comentario extra 3" },
-    { user: { username: "anónimo" }, score: 4, coment: "comentario extra 4" },
-  ]);
-    }, [animeId])
+    }, [animeId]) // cuando cambia el animeId vuelvo a obtener las reseñas
 
     const EnviarReseña = async () => {
         try {

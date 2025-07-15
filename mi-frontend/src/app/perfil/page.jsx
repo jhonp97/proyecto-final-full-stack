@@ -33,100 +33,80 @@ const perfil = () => {
   const [reviews, setReviews] = useState([]);
   const [editarPerfil, setEditarPerfil] = useState(false);
   const [activeTab, setActiveTab] = useState("favoritos"); // Estado para controlar la pestaña activa
-  const [user, setUser] = useState();
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const { token } = useAuth();
-  useEffect(() => {
-    if (token) {
-      const obtenerDatos = async () => {
-        try {
-          setLoading(true);
-          const apiUrl =
-            process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
-          const response = await fetch(`${apiUrl}/auth/me`, {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
 
-          const data = await response.json();
-          if (!response.ok) {
-            throw new Error(
-              data.msg || "No se puedo cargar los datos del perfil"
-            );
-          }
-          setUser(data.data); //para guardar los datos del usuario
-        } catch (e) {
-          console.log("error al obtener datos del perfil", e);
-          setError(e.message);
-        } finally {
-          setLoading(false);
-        }
-      };
-      obtenerDatos();
-    } else {
-      //si no encuentra token se deja de cargar
-      setLoading(false);
-    }
-  }, [token]);
+  const { user, token, loading } = useAuth();
+
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  const rutaBackend = apiUrl.replace("/api/v1", ""); //remuevo para obtener la ruta del back
+  // url para la imagen si se sube, si no usa la que es por defecto
+  const fotoPerfilSrc = user?.fotoPerfil?.startsWith("/uploads") // aqui uso startsWith para verificar que la ruta empieza con /uploads
+    ? `${rutaBackend}${user.fotoPerfil}` : user?.fotoPerfil || "/img/avatar1.png";
+
 
   useEffect(() => {
-  const fetchFavoritos = async () => {
-    if (!user?.favoritos?.length) return;
+    console.log("PAGINA PERFIL: el 'user' ha cambiado:", user);
+  }, [user]);
 
-    try {
-      const detallados = await Promise.all(
-        user.favoritos.map(async (fav) => {
-          const res = await fetch(`https://api.jikan.moe/v4/anime/${fav.animeId}`);
-          const data = await res.json();
-          return data.data;
-        })
-      );
-      setFavoritos(detallados.filter(Boolean));
-    } catch (error) {
-      console.error("Error al obtener detalles de favoritos:", error);
-    }
-  };
+  useEffect(() => {
+    const fetchFavoritos = async () => {
+      if (!user?.favoritos?.length) {
+        setFavoritos([]); //si no hay favoritos limpio el estado
+        return;
+      }
 
-  fetchFavoritos();
-}, [user?.favoritos]);
+      try {
+        const detallados = await Promise.all(
+          user.favoritos.map(async (fav) => {
+            const res = await fetch(`https://api.jikan.moe/v4/anime/${fav.animeId}`);
+            const data = await res.json();
+            return data.data;
+          })
+        );
+        setFavoritos(detallados.filter(Boolean));
+      } catch (error) {
+        console.error("Error al obtener detalles de favoritos:", error);
+      }
+    };
+
+    fetchFavoritos();
+  }, [user?.favoritos]);
 
   const renderContent = () => {
     switch (activeTab) {
       case "favoritos":
         // se verifica que el usuario y la lista estén
-        if(!favoritos || favoritos.length === 0){
-        return (
+        if (!favoritos || favoritos.length === 0) {
+          return (
+            <div>
+              <h2 className="text-2xl font-bold mb-4">Mis Animes Favoritos</h2>
+              <p className="text-slate-400">Aún no has añadido ningún anime a tus favoritos.</p>
+            </div>
+          );
+        } return (
           <div>
             <h2 className="text-2xl font-bold mb-4">Mis Animes Favoritos</h2>
-            <p className="text-slate-400">Aún no has añadido ningún anime a tus favoritos.</p>
-          </div>
-        );
-      } return(
-        <div>
-          <h2 className="text-2xl font-bold mb-4">Mis Animes Favoritos</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {/*uso el map sobre user.favoritos para mostrar el contenido*/}
-            {favoritos.map((anime) => (
-              <AnimeCards key={anime.mal_id} anime={anime} />
-              //adapto la estructura para que coincida con la de mi componente AnimeCards
-              // const cardFavorito = {
-              //   mal_id: fav.animeId,
-              //   titles: [{ type: "Default", title: fav.title }],
-              //   images: { webp: { large_image_url: fav.image } },
-              //   // añado valores por defecto para otras props que el Card pueda necesitar
-              //   score: fav.score, 
-              //   genres: [],
-              //   synopsis: "Haz clic en 'Ver más' para ver los detalles."
-              // };
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {/*uso el map sobre user.favoritos para mostrar el contenido*/}
+              {favoritos.map((anime) => (
+                <AnimeCards key={anime.mal_id} anime={anime} />
+                // CAMBIADO: ahora uso el componente AnimeCards para mostrar los favoritos
+                //adapto la estructura para que coincida con la de mi componente AnimeCards
+                // const cardFavorito = {
+                //   mal_id: fav.animeId,
+                //   titles: [{ type: "Default", title: fav.title }],
+                //   images: { webp: { large_image_url: fav.image } },
+                //   // añado valores por defecto para otras props que el Card pueda necesitar
+                //   score: fav.score, 
+                //   genres: [],
+                //   synopsis: "Haz clic en 'Ver más' para ver los detalles."
+                // };
 
-              // return <AnimeCards key={fav.animeId} anime={cardFavorito} />;
-            ))}
+                // return <AnimeCards key={fav.animeId} anime={cardFavorito} />;
+              ))}
+            </div>
           </div>
-        </div>
-      )
+        )
       case "privada":
         return (
           <div>
@@ -155,16 +135,16 @@ const perfil = () => {
     }
   };
 
-  if(loading){
-    return <Loading/>
+  if (loading) {
+    return <Loading />
   }
 
-  if(error){
+  if (error) {
     return <p className="text-center text-red-500 mt-10">Error: {error}</p>;
   }
 
-    if (!user && !loading) {
-      return <p className="text-center text-yellow-500 mt-10">Inicia sesión para ver tu perfil</p>;
+  if (!user && !loading) {
+    return <p className="text-center text-yellow-500 mt-10">Inicia sesión para ver tu perfil</p>;
   }
 
   return (
@@ -173,7 +153,7 @@ const perfil = () => {
       <div className="bg-slate-800 rounded-lg p-6 flex flex-col sm:flex-row items-center gap-6">
         <div className="relative">
           <Image
-            src={user?.fotoPerfil ||"/img/avatar1.png" }
+            src={fotoPerfilSrc}
             alt={`Foto de perfil de ${user?.username || "usuario"} `}
             width={128}
             height={128}
@@ -200,41 +180,37 @@ const perfil = () => {
       <div className="flex border-b border-slate-700 mt-8 mb-6">
         <button
           onClick={() => setActiveTab("favoritos")}
-          className={`px-4 py-2 font-medium text-sm transition-colors duration-200 ${
-            activeTab === "favoritos"
+          className={`px-4 py-2 font-medium text-sm transition-colors duration-200 ${activeTab === "favoritos"
               ? "border-b-2 border-cyan-500 text-white"
               : "text-slate-400 hover:text-white"
-          }`}
+            }`}
         >
           Mis Favoritos
         </button>
         <button
           onClick={() => setActiveTab("privada")}
-          className={`px-4 py-2 font-medium text-sm transition-colors duration-200 ${
-            activeTab === "privada"
+          className={`px-4 py-2 font-medium text-sm transition-colors duration-200 ${activeTab === "privada"
               ? "border-b-2 border-cyan-500 text-white"
               : "text-slate-400 hover:text-white"
-          }`}
+            }`}
         >
           Mi Lista Privada
         </button>
         <button
           onClick={() => setActiveTab("reseñas")}
-          className={`px-4 py-2 font-medium text-sm transition-colors duration-200 ${
-            activeTab === "reseñas"
+          className={`px-4 py-2 font-medium text-sm transition-colors duration-200 ${activeTab === "reseñas"
               ? "border-b-2 border-cyan-500 text-white"
               : "text-slate-400 hover:text-white"
-          }`}
+            }`}
         >
           Mis Reseñas
         </button>
         <button
           onClick={() => setActiveTab("amigos")}
-          className={`relative px-4 py-2 font-medium text-sm transition-colors duration-200 ${
-            activeTab === "amigos"
+          className={`relative px-4 py-2 font-medium text-sm transition-colors duration-200 ${activeTab === "amigos"
               ? "border-b-2 border-cyan-500 text-white"
               : "text-slate-400 hover:text-white"
-          }`}
+            }`}
         >
           Amigos
           {/* Notificación de solicitud de amistad */}

@@ -43,8 +43,8 @@ export function AuthProvider({ children }) {
       const response = await fetch(`${apiUrl}/auth/me`, {
         headers: { 'Authorization': `Bearer ${currenToken}` }
       });
-      const data = await response.json()
       if(response.ok){
+        const data = await response.json()
         setUser(data.data) //para actualizar el usuario
         // console.log(data)
         // console.log(user)

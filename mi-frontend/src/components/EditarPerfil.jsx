@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useAuth } from "@/context/AuthContext"; 
 
 const EditarPerfil = ({ user, onClose, onProfileUpdate }) => {
-  const { token } = useAuth(); //obtengo el token desde el contexto
+  const { token, updateData } = useAuth(); //obtengo el token desde el contexto
   const [username, setUsername] = useState(user.username);
   const [bio, setBio] = useState(user.bio);
   const [file, setFile] = useState(null);
@@ -15,31 +15,34 @@ const EditarPerfil = ({ user, onClose, onProfileUpdate }) => {
     const formData = new FormData();
     formData.append("username", username);
     formData.append("bio", bio);
-    if (file) formData.append("profilePicture", file);
+    if (file) {
+      formData.append("fotoPerfil", file);
+    }
 
     try {
       // variable de entorno para la URL de la api (Fijarme que todo este CORRECTO despues)
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1/perfil";
-      const response = await fetch(`${apiUrl}/users/profile`, { // Ruta completa
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
+      const response = await fetch(`${apiUrl}/perfil`, { // Ruta completa
         method: "PUT",
         headers: {
-          // No necesitas 'Content-Type' aquí, el navegador lo pone solo con FormData
           Authorization: `Bearer ${token}`,
         },
         body: formData,
       });
-    //   console.log("mi response es", response)
+
+      const data= await response.json();
+      // console.log("mis datos actualizados son", data);
+
+
+    
       if (!response.ok) {
-         const errorData = await response.json();
-         throw new Error(errorData.message || "Error al actualizar");
+         throw new Error(data.msg || `Error al actualizar el perfil  ${response.status}`);
       }
-      
-      const updatedUser = await response.json();
-      console.log(`mis datos actualizados son ${update}`)
-
-      // actualizar luego el esatdo
-      // perfilAct(updatedUser); 
-
+      console.log(`perfil actualizado con exito: ${data}`)
+      // actualizar luego el estado
+      if (updateData) {
+        await updateData(); //actualizo los datos del usuario
+      }
       onClose(); //para que se cierre despues de que se guarde
     } catch (err) {
       console.error("Error al actualizar perfil:", err);

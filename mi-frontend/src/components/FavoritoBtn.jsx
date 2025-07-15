@@ -18,10 +18,9 @@ const FavoritoBtn = ({ anime }) => {
             setIsFavorite(false)
         }
     }, [user, anime.mal_id])
+    // console.log("favoritos del usuario", user?.favoritos)
 
-
-
-
+    // funcion para agregar o quitar el anime de favoritos
     const toggleFavorito = async () => {
         if (!token) {
             alert("Debes iniciar sesión para añadir a favoritos."); //mensaje de que debe estar registardo para agregar a fav
@@ -30,7 +29,8 @@ const FavoritoBtn = ({ anime }) => {
 
         const titulo = anime.titles?.find(t => t.type === "Default")?.title || anime.title;
         const imageUrl = anime.images?.webp?.large_image_url;
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
+        const genero = anime.genres?.[0]?.name || 'Desconocido';
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL ;
 
         // aqui depende de que si el esatdo actual es true (si ya esta en favoritos) se elimina al hacer click (DELETE), y si no, lo agrego con POST
         const metodo = isFavorite ? "DELETE" : "POST";
@@ -47,17 +47,19 @@ const FavoritoBtn = ({ anime }) => {
                 body: metodo === "POST" ? JSON.stringify({
                     animeId: anime.mal_id,
                     title: titulo,
-                    image: imageUrl
+                    image: imageUrl,
+                    genero: genero,
                 }) : null,
             });
 
             if (!res.ok) {
-                throw new Error(`error al ${isFavorite ? 'eliminar' : 'añadir'} el favorito`)
+                const errorData = await res.json();
+                throw new Error(`error al ${isFavorite ? 'eliminar' : 'añadir'} el favorito: ${errorData.msg}`)
             }
             setIsFavorite(prev => !prev) // actualizo el estado del boton
             // actualizar los datos del usuario
             if (updateData) {
-                updateData()
+                await updateData()
             }
 
         } catch (e) {
@@ -65,9 +67,7 @@ const FavoritoBtn = ({ anime }) => {
         }
         // console.log(isFavorite)
     };
-    useEffect(() => {
-        updateData?.(); //si está definido, se ejecuta
-    }, []);
+   
 
     return (
         <button
