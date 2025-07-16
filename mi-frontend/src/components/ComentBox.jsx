@@ -7,6 +7,7 @@ import { useAuth } from "@/context/AuthContext";
 
 import BtnPaginacion from "@/components/BtnPaginacion.jsx";
 import Link from "next/link";
+import Image from "next/image";
 
 const ComentBox = ({ animeId }) => {
   const { user, token } = useAuth();
@@ -27,7 +28,11 @@ const ComentBox = ({ animeId }) => {
   const apiUrl =
     process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
 
-  // CAMBIAR ESTO CUANDO HAGA EL BACKEND
+  const rutaBackend = apiUrl.replace("/api/v1", ""); //remuevo para obtener la ruta del back
+  // url para la imagen si se sube, si no usa la que es por defecto
+  const fotoPerfilSrc = user?.fotoPerfil?.startsWith("/uploads") // aqui uso startsWith para verificar que la ruta empieza con /uploads
+    ? `${rutaBackend}${user.fotoPerfil}` : user?.fotoPerfil || "/img/avatar1.png";
+
   const obtenerReseñas = async () => {
     try {
       const response = await fetch(`${apiUrl}/reviews/${animeId}`);
@@ -62,14 +67,14 @@ const ComentBox = ({ animeId }) => {
 
     try {
       const response = await fetch(ruta, {
-        metodo,
+        method: metodo,
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           animeId: animeId,
-          comment: comentario, 
+          comment: comentario,
           rating: puntuacion,
         }),
       });
@@ -145,19 +150,23 @@ const ComentBox = ({ animeId }) => {
 
       <ul className="mt-8 space-y-4">
         {reseñasMostradas.length > 0 ? reseñasMostradas.map((r) => (
-          <li key={r._id} className="bg-slate-900 p-4 rounded-lg">
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2">
-                <Image src={r.user?.fotoPerfil || '/img/avatar1.png'} width={32} height={32} alt={r.user?.username} className="w-8 h-8 rounded-full object-cover" />
-                <span className="font-bold">{r.user?.username || "Anónimo"}</span>
+          <li key={r._id} className="bg-slate-900 p-4 rounded-lg flex flex-col items-center sm:flex-row gap-4">
+
+            <div className="flex  items-start justify-start  mb-2">
+
+              <Image src={fotoPerfilSrc || '/img/avatar1.png'} width={35} height={35} alt={r.user?.username} className="w-12 h-12 rounded-full object-cover mr-2" />
+
+              <div className="flex flex-col  items-start">
+                <span className="font-bold mb-0">{r.user?.username || "Anónimo"}</span>
+                
+                <span className="flex">
+                  {[...Array(5)].map((_, i) => (
+                    <span key={i} className={`text-lg ${i < r.rating ? "text-yellow-400" : "text-gray-500"}`}>★</span>
+                  ))}
+                </span>
               </div>
-              <span className="flex">
-                {[...Array(5)].map((_, i) => (
-                  <span key={i} className={`text-lg ${i < r.rating ? "text-yellow-400" : "text-gray-500"}`}>★</span>
-                ))}
-              </span>
             </div>
-            <p className="text-gray-300 pl-10">{r.comment}</p>
+            <p className="text-gray-300 pl-10 sm:pl-10 sm:border-l-2">{r.comment}</p>
             {/* 4. muestro botones solo si el usuario logueado es el autor */}
             {user && user.id === r.user?._id && (
               <div className="flex gap-4 mt-2 pl-10">

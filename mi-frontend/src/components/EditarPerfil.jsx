@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useAuth } from "@/context/AuthContext"; 
 
-const EditarPerfil = ({ user, onClose, onProfileUpdate }) => {
-  const { token, updateData } = useAuth(); //obtengo el token desde el contexto
+const EditarPerfil = ({ user, onClose }) => {
+  const { token, fetchUserData } = useAuth(); //obtengo el token desde el contexto
   const [username, setUsername] = useState(user.username);
   const [bio, setBio] = useState(user.bio);
   const [file, setFile] = useState(null);
@@ -32,17 +32,17 @@ const EditarPerfil = ({ user, onClose, onProfileUpdate }) => {
 
       const data= await response.json();
       // console.log("mis datos actualizados son", data);
-
-
-    
       if (!response.ok) {
          throw new Error(data.msg || `Error al actualizar el perfil  ${response.status}`);
       }
       console.log(`perfil actualizado con exito: ${data}`)
-      // actualizar luego el estado
-      if (updateData) {
-        await updateData(); //actualizo los datos del usuario
-      }
+
+      // actualizar luego el estado 
+       if (fetchUserData) { 
+         await fetchUserData(); //actualizo los datos del usuario
+       }
+   
+
       onClose(); //para que se cierre despues de que se guarde
     } catch (err) {
       console.error("Error al actualizar perfil:", err);

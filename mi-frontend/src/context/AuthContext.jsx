@@ -37,7 +37,7 @@ export function AuthProvider({ children }) {
 
     useEffect(() => {
       fetchUserData()
-    },[])
+    },[]); // Dependencias vacías para que se ejecute una vez al montar el componente
 
   const login = (userData, userToken) => {
     localStorage.setItem("authToken", userToken);
@@ -53,7 +53,7 @@ export function AuthProvider({ children }) {
 
   
   return (
-    <AuthContext.Provider value={{ user, token, login, logout, loading, fetchUserData }}>
+    <AuthContext.Provider value={{ user, token, login, logout, loading, fetchUserData, setUser }}>
       {children}
     </AuthContext.Provider>
   );

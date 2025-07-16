@@ -30,6 +30,7 @@ const FavoritoBtn = ({ anime }) => {
         const titulo = anime.titles?.find(t => t.type === "Default")?.title || anime.title;
         const imageUrl = anime.images?.webp?.large_image_url;
         const genero = anime.genres?.[0]?.name || 'Desconocido';
+        const score = anime.score || 0;
         const apiUrl = process.env.NEXT_PUBLIC_API_URL ;
 
         // aqui depende de que si el esatdo actual es true (si ya esta en favoritos) se elimina al hacer click (DELETE), y si no, lo agrego con POST
@@ -49,6 +50,7 @@ const FavoritoBtn = ({ anime }) => {
                     title: titulo,
                     image: imageUrl,
                     genero: genero,
+                    score: score
                 }) : null,
             });
 

@@ -2,11 +2,13 @@
 
 import { useState, useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { FiEdit, FiCamera, FiBell } from "react-icons/fi";
 import AnimeCards from "@/components/AnimeCards";
 import EditarPerfil from "@/components/EditarPerfil";
 import Loading from "@/components/Loading";
+import Link from "next/link";
 
 //  DATOS DE EJEMPLO (usados antes de hacer el back )
 // const mockUser = {
@@ -36,12 +38,13 @@ const perfil = () => {
   // const [error, setError] = useState(null);
 
   const { user, token, loading, error } = useAuth();
+  const router = useRouter();
 
-  // const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-  // const rutaBackend = apiUrl.replace("/api/v1", ""); //remuevo para obtener la ruta del back
-  // // url para la imagen si se sube, si no usa la que es por defecto
-  // const fotoPerfilSrc = user?.fotoPerfil?.startsWith("/uploads") // aqui uso startsWith para verificar que la ruta empieza con /uploads
-  //   ? `${rutaBackend}${user.fotoPerfil}` : user?.fotoPerfil || "/img/avatar1.png";
+   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+   const rutaBackend = apiUrl.replace("/api/v1", ""); //remuevo para obtener la ruta del back
+   // url para la imagen si se sube, si no usa la que es por defecto
+   const fotoPerfilSrc = user?.fotoPerfil?.startsWith("/uploads") // aqui uso startsWith para verificar que la ruta empieza con /uploads
+     ? `${rutaBackend}${user.fotoPerfil}` : user?.fotoPerfil || "/img/avatar1.png";
 
   // useEffect(() => {
   //   console.log("PAGINA PERFIL: el 'user' ha cambiado:", user);
@@ -141,13 +144,11 @@ const perfil = () => {
     return <p className="text-center text-red-500 mt-10">Error: {error}</p>;
   }
 
-  if (!user && !loading) {
-    return (
-      <p className="text-center text-yellow-500 mt-10">
-        Inicia sesión para ver tu perfil
-      </p>
-    );
-  }
+  
+    //si la carga ha terminado y AÚN no hay usuario, lo redirige a la página de login
+    if (!loading && !user) {
+      router.push('/login');
+    }
 
   return (
     <section className="max-w-7xl mx-auto p-4 md:p-8 text-white">
