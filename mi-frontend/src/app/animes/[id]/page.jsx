@@ -9,6 +9,8 @@ import Image from "next/image";
 import ComentBox from "@/components/ComentBox";
 import Hero from "@/components/Hero";
 import Loading from "@/components/Loading";
+import Link from "next/link";
+import { FaPlay } from "react-icons/fa";
 
 
 export default function AnimeDetail() {
@@ -36,7 +38,7 @@ export default function AnimeDetail() {
 
   if (loading) {
     return (
-      <Loading/>
+      <Loading />
     );
   }
 
@@ -55,7 +57,7 @@ export default function AnimeDetail() {
       <Hero
         imageSrc={
           anime.trailer?.images?.maximum_image_url ||
-          anime.images?.jpg?.large_image_url 
+          anime.images?.jpg?.large_image_url
         }
         title={anime.title}
         subtitle={`${anime.rating} — ${anime.status}`}
@@ -76,7 +78,7 @@ export default function AnimeDetail() {
                 className="rounded-lg shadow-lg object-cover w-full md:w-64 h-100"
               />
 
-              <div className="flex-1">
+              <div className="flex-1 ">
                 <h1 className="text-4xl font-bold mb-4">{anime.title}</h1>
 
                 <div className="flex flex-wrap gap-2 mb-4">
@@ -106,9 +108,22 @@ export default function AnimeDetail() {
                     .join('.') + '.'}
                 </p>
 
+                {/* boton para ver los capitulos*/}
+                {anime.url && (
+                  <Link
+                    href={anime.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mb-4 mr-4 inline-flex items-center gap-2 bg-cyan-600 text-white font-bold px-5 py-3 rounded-lg hover:bg-cyan-700 transition-colors duration-300"
+                  >
+                    <FaPlay /> {/* icono de Play */}
+                    Ver en MyAnimeList
+                  </Link>
+                )}
+
 
                 {/* boton de favoritos */}
-                <div className="bg-gray-700 p-2 rounded-lg inline-flex items-center">
+                <div className="bg-gray-700 p-2 rounded-lg inline-flex  items-center">
                   <FavoritoBtn anime={anime} />
                 </div>
               </div>
