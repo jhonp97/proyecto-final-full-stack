@@ -9,19 +9,35 @@ export function AuthProvider({ children }) {
   const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true); // para saber si se está verificando el token
 
-  useEffect(() => {
-    // al cargar la app intenta recuperar el token delocalStorage
-    const storedToken = localStorage.getItem("authToken");
-    if (storedToken) {
-      // aqui tengo que hacer el llamado a mi api del back y obtener los datos del usuario, ahora lo simulo (recordatorio para cuando haga el back)
+  const fetchUserData= async ()=>{
 
-      setToken(storedToken);
-      setUser({
-        /* datos del usuario del back */
-      });
+    
+      // al cargar la app intenta recuperar el token delocalStorage
+      const storedToken = localStorage.getItem("authToken");
+      if (storedToken) {
+        setToken(storedToken);
+        try{
+           const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
+          const response = await fetch(`${apiUrl}/auth/me`, {
+          headers: { 'Authorization': `Bearer ${storedToken}` }
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setUser(data.data);
+        } else {
+          logout(); //si el token no es valido cierro sesion
+        }
+        }catch(error){
+          console.error("Error al veriificar token: ", error);
+          logout()
+        }
+      }
+      setLoading(false);
     }
-    setLoading(false);
-  }, []);
+
+    useEffect(() => {
+      fetchUserData()
+    },[])
 
   const login = (userData, userToken) => {
     localStorage.setItem("authToken", userToken);
@@ -35,31 +51,9 @@ export function AuthProvider({ children }) {
     setToken(null);
   };
 
-  const updateData= async()=>{
-    const currenToken= localStorage.getItem("authToken")
-    if(!currenToken)return
-    try{
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
-      const response = await fetch(`${apiUrl}/auth/me`, {
-        headers: { 'Authorization': `Bearer ${currenToken}` }
-      });
-      if(response.ok){
-        const data = await response.json()
-        setUser(data.data) //para actualizar el usuario
-        // console.log(data)
-        // console.log(user)
-      }
-    } catch(error){
-      console.log("error al actualizar los datos del usuario: ", error)
-    }
-  }
-
-  useEffect(()=>{
-    // al cargar la pagina uso la funcion de actualizar 
-    updateData()
-  },[])
+  
   return (
-    <AuthContext.Provider value={{ user, token, login, logout, loading, updateData }}>
+    <AuthContext.Provider value={{ user, token, login, logout, loading, fetchUserData }}>
       {children}
     </AuthContext.Provider>
   );
