@@ -52,7 +52,7 @@ const perfil = () => {
     const fetchMisReseñas = async () => {
       if(activeTab=== "reseñas" && token){
         try{
-          const response= await fetch(`${apiUrl}/reviews/me`, {
+          const response= await fetch(`${apiUrl}/reviews/my-reviews`, {
             headers: {Authorization: `Bearer ${token}`} 
           });
           if (!response.ok) {

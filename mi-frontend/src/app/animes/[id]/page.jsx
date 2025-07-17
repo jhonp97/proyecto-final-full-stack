@@ -152,7 +152,7 @@ export default function AnimeDetail() {
         <div className="mt-12">
           <h2 className="text-3xl font-bold mb-8">Reseñas</h2>
           <div className="bg-gray-800 rounded-lg p-6">
-            <ComentBox animeId={anime.mal_id} />
+            <ComentBox anime={anime} />
           </div>
         </div>
       </div>

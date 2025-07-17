@@ -9,7 +9,7 @@ import BtnPaginacion from "@/components/BtnPaginacion.jsx";
 import Link from "next/link";
 import Image from "next/image";
 
-const ComentBox = ({ animeId }) => {
+const ComentBox = ({ anime }) => {
   const { user, token } = useAuth();
   const [reseñas, setReseñas] = useState([]);
   const [comentario, setComentario] = useState("");
@@ -17,6 +17,7 @@ const ComentBox = ({ animeId }) => {
   const [pagina, setPagina] = useState(1);
   const [editando, setEditando] = useState(null);
 
+  const animeId = anime.mal_id; //traigo el id desde anime
   const reseñasPorPagina = 3;
 
   const totalPaginas = Math.ceil(reseñas.length / reseñasPorPagina);
@@ -64,6 +65,9 @@ const ComentBox = ({ animeId }) => {
       ? `${apiUrl}/reviews/${editando._id}`
       : `${apiUrl}/reviews`;
     const metodo = editando ? "PUT" : "POST";
+
+    const animeTitle = anime.titles?.find(t => t.type === "Default")?.title || anime.title;
+    const animeImage = anime.images?.webp?.large_image_url;
 
     try {
       const response = await fetch(ruta, {
@@ -120,6 +124,8 @@ const ComentBox = ({ animeId }) => {
       console.error("Error al eliminar la reseña:", e);
     }
   };
+
+  
   return (
     <section className="text-white mt-2">
       <h3 className="text-xl text-center font-semibold mb-4">Reseñas de la Comunidad</h3>
@@ -154,7 +160,7 @@ const ComentBox = ({ animeId }) => {
       <ul className="mt-8 space-y-4">
         {reseñasMostradas.length > 0 ? reseñasMostradas.map((r) => (
           <li key={r._id} className="bg-slate-900 p-4 rounded-lg flex flex-col items-center sm:flex-row gap-4">
-
+            {}
             <div className="flex  items-start justify-start  mb-2">
 
               <Image src={fotoPerfilSrc || '/img/avatar1.png'} width={35} height={35} alt={r.user?.username} className="w-12 h-12 rounded-full object-cover mr-2" />
@@ -171,7 +177,8 @@ const ComentBox = ({ animeId }) => {
             </div>
             <p className="text-gray-300 pl-10 sm:pl-10 sm:border-l-2">{r.comment}</p>
             {/* 4. muestro botones solo si el usuario logueado es el autor */}
-            {user && user.id === r.user?._id && (
+            {/* aplico el toString() para asegurarme de que el id es un string porque no me mostraba los botones  */}
+            {user && user._id === r.user?._id.toString() && (
               <div className="flex gap-4 mt-2 pl-10">
                 <button onClick={() => handleEditar(r)} className="text-xs text-yellow-400 hover:underline">Editar</button>
                 <button onClick={() => handleEliminar(r._id)} className="text-xs text-red-500 hover:underline">Eliminar</button>

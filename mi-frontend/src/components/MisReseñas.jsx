@@ -20,7 +20,7 @@ const MisReseñasCard = ({ review}) => {
                         </span>
                     ))}
                 </div>
-                <p className="text-slate-400 mt-2">{review.content}</p>
+                <p className="text-slate-400 mt-2">{review.comment}</p>
             </div>
         </article>
     )
