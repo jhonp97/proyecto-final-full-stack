@@ -76,6 +76,9 @@ const ComentBox = ({ animeId }) => {
           animeId: animeId,
           comment: comentario,
           rating: puntuacion,
+          animeTitle,
+          animeImage
+
         }),
       });
 

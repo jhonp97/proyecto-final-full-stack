@@ -9,6 +9,7 @@ import AnimeCards from "@/components/AnimeCards";
 import EditarPerfil from "@/components/EditarPerfil";
 import Loading from "@/components/Loading";
 import Link from "next/link";
+import MisReseñasCard from "@/components/MisReseñas";
 
 //  DATOS DE EJEMPLO (usados antes de hacer el back )
 // const mockUser = {
@@ -32,7 +33,7 @@ import Link from "next/link";
 //   }];
 const perfil = () => {
   const [favoritos, setFavoritos] = useState([]);
-  const [reviews, setReviews] = useState([]);
+  const [reseñas, setReseñas] = useState([]);
   const [editarPerfil, setEditarPerfil] = useState(false);
   const [activeTab, setActiveTab] = useState("favoritos"); // Estado para controlar la pestaña activa
   // const [error, setError] = useState(null);
@@ -46,34 +47,27 @@ const perfil = () => {
    const fotoPerfilSrc = user?.fotoPerfil?.startsWith("/uploads") // aqui uso startsWith para verificar que la ruta empieza con /uploads
      ? `${rutaBackend}${user.fotoPerfil}` : user?.fotoPerfil || "/img/avatar1.png";
 
-  // useEffect(() => {
-  //   console.log("PAGINA PERFIL: el 'user' ha cambiado:", user);
-  // }, [user]);
-
-  // useEffect(() => {
-  //   const fetchFavoritos = async () => {
-  //     if (!user?.favoritos?.length) {
-  //       setFavoritos([]); //si no hay favoritos limpio el estado
-  //       return;
-  //     }
-
-  //     try {
-  //       const detallados = await Promise.all(
-  //         user.favoritos.map(async (fav) => {
-  //           const res = await fetch(`https://api.jikan.moe/v4/anime/${fav.animeId}`);
-  //           const data = await res.json();
-  //           return data.data;
-  //         })
-  //       );
-  //       setFavoritos(detallados.filter(Boolean));
-  //     } catch (error) {
-  //       console.error("Error al obtener detalles de favoritos:", error);
-  //     }
-  //   };
-
-  //   fetchFavoritos();
-  // }, [user?.favoritos]);
-
+  useEffect(() => {
+  
+    const fetchMisReseñas = async () => {
+      if(activeTab=== "reseñas" && token){
+        try{
+          const response= await fetch(`${apiUrl}/reviews/me`, {
+            headers: {Authorization: `Bearer ${token}`} 
+          });
+          if (!response.ok) {
+            throw new Error("Error al obtener las reseñas");
+          }
+          const data = await response.json();
+          setReseñas(data);
+          console.log("mis reseñas son:", data);
+        } catch (error) {
+          console.error("Error al obtener reseñas:", error);
+        }
+      }}
+    fetchMisReseñas();
+  }, [activeTab, token]);//se ejecuta cuando cambia activeTab(pestaña) o token
+  
   const renderContent = () => {
     switch (activeTab) {
       case "favoritos":
@@ -121,7 +115,15 @@ const perfil = () => {
         return (
           <div>
             <h2 className="text-2xl font-bold mb-4">Mis Reseñas</h2>
-            <p className="text-slate-400">Aquí se mostrarán las reseñas </p>
+            {reseñas.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols gap-4">
+                {reseñas.map((review) => (
+                  <MisReseñasCard key={review._id} review={review} />
+                ))}
+              </div>
+            ) : (
+            <p className="text-slate-400">Aún no has realizado reseñas.</p>
+            )} 
           </div>
         );
       case "amigos":

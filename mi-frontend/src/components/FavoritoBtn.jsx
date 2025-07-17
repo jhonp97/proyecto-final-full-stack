@@ -6,7 +6,7 @@ import { useAuth } from "@/context/AuthContext"
 import { FaHeart, FaRegHeart } from "react-icons/fa"
 
 const FavoritoBtn = ({ anime }) => {
-    const { user, token, updateData } = useAuth()
+    const { user, token, fetchUserData } = useAuth()
     const [isFavorite, setIsFavorite] = useState(false)
 
 
@@ -60,8 +60,8 @@ const FavoritoBtn = ({ anime }) => {
             }
             setIsFavorite(prev => !prev) // actualizo el estado del boton
             // actualizar los datos del usuario
-            if (updateData) {
-                await updateData()
+            if (fetchUserData) {
+                await fetchUserData()
             }
 
         } catch (e) {
