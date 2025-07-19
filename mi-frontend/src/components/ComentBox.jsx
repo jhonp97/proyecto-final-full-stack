@@ -164,9 +164,9 @@ const ComentBox = ({ anime }) => {
             {}
             <div className="flex  items-start justify-start  mb-2">
               {/* CAMBIAR ENLACE AL CREAR LA PAGINA DE PERFIL DE CADA USUARIO */}
-            {/* <Link href="/perfil">  */}
+            <Link href="/perfil" className=" w-12 mr-2">  
               <Image src={fotoPerfilSrc || '/img/avatar1.png'} width={35} height={35} alt={r.user?.username} className="w-12 h-12 rounded-full object-cover mr-2" />
-            {/* </Link> */}
+             </Link> 
 
               <div className="flex flex-col  items-start">
                 <span className="font-bold mb-0">{r.user?.username || "Anónimo"}</span>
@@ -181,13 +181,13 @@ const ComentBox = ({ anime }) => {
             {/* 4. muestro botones solo si el usuario logueado es el autor */}
             {/* aplico el toString() para asegurarme de que el id es un string porque no me mostraba los botones  */}
             {user && user._id === r.user?._id.toString() && (
-              <div className="flex gap-4 mt-2 pl-10">
+              <div className="flex gap-4 mt-2 pl-10 ">
                 <button onClick={() => handleEditar(r)}
                 title="Editar" 
-                className="text-xs text-yellow-400 hover:underline cursor-pointer"><FiEdit/></button>
+                className="text-sm text-yellow-400 hover:underline cursor-pointer"><FiEdit/></button>
                 <button onClick={() => handleEliminar(r._id)} 
                 title="Eliminar"
-                className="text-xs text-red-500 hover:underline cursor-pointer"><FiTrash/></button>
+                className="text-sm text-red-500 hover:underline cursor-pointer"><FiTrash/></button>
               </div>
             )}
           </li>

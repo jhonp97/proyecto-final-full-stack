@@ -32,28 +32,32 @@ import MisReseñasCard from "@/components/MisReseñas";
 //     synopsis: "La humanidad lucha contra titanes en un mundo postapocalíptico."
 //   }];
 const perfil = () => {
-  const [favoritos, setFavoritos] = useState([]);
+  // const [favoritos, setFavoritos] = useState([]);
   const [reseñas, setReseñas] = useState([]);
   const [editarPerfil, setEditarPerfil] = useState(false);
   const [activeTab, setActiveTab] = useState("favoritos"); // Estado para controlar la pestaña activa
   // const [error, setError] = useState(null);
+  const [datosAmigos, setDatosAmigos] = useState({
+    amigos: [],
+    solicitudes: [],
+  });
 
   const { user, token, loading, error } = useAuth();
   const router = useRouter();
 
-   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-   const rutaBackend = apiUrl.replace("/api/v1", ""); //remuevo para obtener la ruta del back
-   // url para la imagen si se sube, si no usa la que es por defecto
-   const fotoPerfilSrc = user?.fotoPerfil?.startsWith("/uploads") // aqui uso startsWith para verificar que la ruta empieza con /uploads
-     ? `${rutaBackend}${user.fotoPerfil}` : user?.fotoPerfil || "/img/avatar1.png";
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  const rutaBackend = apiUrl.replace("/api/v1", ""); //remuevo para obtener la ruta del back
+  // url para la imagen si se sube, si no usa la que es por defecto
+  const fotoPerfilSrc = user?.fotoPerfil?.startsWith("/uploads") // aqui uso startsWith para verificar que la ruta empieza con /uploads
+    ? `${rutaBackend}${user.fotoPerfil}`
+    : user?.fotoPerfil || "/img/avatar1.png";
 
   useEffect(() => {
-  
     const fetchMisReseñas = async () => {
-      if(activeTab=== "reseñas" && token){
-        try{
-          const response= await fetch(`${apiUrl}/reviews/my-reviews`, {
-            headers: {Authorization: `Bearer ${token}`} 
+      if (activeTab === "reseñas" && token) {
+        try {
+          const response = await fetch(`${apiUrl}/reviews/my-reviews`, {
+            headers: { Authorization: `Bearer ${token}` },
           });
           if (!response.ok) {
             throw new Error("Error al obtener las reseñas");
@@ -64,10 +68,11 @@ const perfil = () => {
         } catch (error) {
           console.error("Error al obtener reseñas:", error);
         }
-      }}
+      }
+    };
     fetchMisReseñas();
-  }, [activeTab, token]);//se ejecuta cuando cambia activeTab(pestaña) o token
-  
+  }, [activeTab, token]); //se ejecuta cuando cambia activeTab(pestaña) o token
+
   const renderContent = () => {
     switch (activeTab) {
       case "favoritos":
@@ -103,12 +108,24 @@ const perfil = () => {
           </div>
         );
       case "privada":
+        if (!user?.listaPrivada || user.listaPrivada.length === 0) {
+          return <p className="text-slate-400">La lista privada está vacía.</p>;
+        }
         return (
-          <div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             <h2 className="text-2xl font-bold mb-4">Mi Lista Privada</h2>
-            <p className="text-slate-400">
-              Aquí se mostrarán los animes de lista privada.
-            </p>
+            {user.listaPrivada.map((priv) => {
+              const cardFavoritoPriv = {
+                mal_id: priv.animeId,
+                titles: [{ type: "Default", title: priv.title }],
+                images: { webp: { large_image_url: priv.image } },
+                score: priv.score,
+                genres: priv.genero ? [{ name: fav.genero }] : [],
+                synopsis: "Haz clic en 'Ver más' para ver los detalles.",
+              };
+
+              return <AnimeCards key={priv.animeId} anime={cardFavoritoPriv} />;
+            })}
           </div>
         );
       case "reseñas":
@@ -122,11 +139,12 @@ const perfil = () => {
                 ))}
               </div>
             ) : (
-            <p className="text-slate-400">Aún no has realizado reseñas.</p>
-            )} 
+              <p className="text-slate-400">Aún no has realizado reseñas.</p>
+            )}
           </div>
         );
       case "amigos":
+       
         return (
           <div>
             <h2 className="text-2xl font-bold mb-4">Mis Amigos</h2>
@@ -146,11 +164,10 @@ const perfil = () => {
     return <p className="text-center text-red-500 mt-10">Error: {error}</p>;
   }
 
-  
-    //si la carga ha terminado y AÚN no hay usuario, lo redirige a la página de login
-    if (!loading && !user) {
-      router.push('/login');
-    }
+  //si la carga ha terminado y AÚN no hay usuario, lo redirige a la página de login
+  if (!loading && !user) {
+    router.push("/login");
+  }
 
   return (
     <section className="max-w-7xl mx-auto p-4 md:p-8 text-white">
@@ -223,9 +240,11 @@ const perfil = () => {
         >
           Amigos
           {/* Notificación de solicitud de amistad */}
-          <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
-            1
-          </span>
+           {user?.solicitudAmistad?.length > 0 && (
+            <span className="absolute -top-1 -right-1 ...">
+              {user.solicitudAmistad.length}
+            </span>
+          ) }
         </button>
       </div>
 
