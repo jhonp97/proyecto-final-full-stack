@@ -5,12 +5,15 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation"
 import FavoritoBtn from "@/components/FavoritoBtn.jsx"
+import BtnPriv from "@/components/BtnPriv";
 import Image from "next/image";
 import ComentBox from "@/components/ComentBox";
 import Hero from "@/components/Hero";
 import Loading from "@/components/Loading";
 import Link from "next/link";
 import { FaPlay } from "react-icons/fa";
+
+
 
 
 export default function AnimeDetail() {
@@ -121,10 +124,16 @@ export default function AnimeDetail() {
                   </Link>
                 )}
 
-
+                {/* BOTONES DE ACCION */}
+                <div>
                 {/* boton de favoritos */}
                 <div className="bg-gray-700 p-2 rounded-lg inline-flex  items-center">
                   <FavoritoBtn anime={anime} />
+                </div>
+                <div className="bg-gray-700 p-2 rounded-lg inline-flex items-center" title="Añadir a Lista Privada">
+                  <BtnPriv anime={anime}/>
+                </div>
+
                 </div>
               </div>
             </div>
