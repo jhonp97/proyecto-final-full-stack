@@ -125,7 +125,7 @@ export default function AnimeDetail() {
                 )}
 
                 {/* BOTONES DE ACCION */}
-                <div>
+                <div className="flex gap-4 mt-4">
                 {/* boton de favoritos */}
                 <div className="bg-gray-700 p-2 rounded-lg inline-flex  items-center">
                   <FavoritoBtn anime={anime} />

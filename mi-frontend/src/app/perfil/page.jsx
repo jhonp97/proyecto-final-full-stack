@@ -1,15 +1,24 @@
+// esta es mi pagina del perfil, donde muestro los datos del usuario, sus favoritos, reseñas y amigos
+// importo los componentes necesarios para la pagina
+// dejo comentado el mock de datos que usaba antes de hacer el back
+// para lo demas tenia varios useEffect para hacer fetch para las reseñas y amigos y como me habia quedado codigo demasiado largo
+// decidi dividir el ocntenido en varios componentes, me costó un poco porque al final me hice líos con los nombres de cada cosa 
+// pero despues de media tarde de mirar y probar se pudo hacer y tocó cambiar alguna cosas como:
+// el usseEffect para cargar las reseñas y los amigos
+
 "use client";
 
 import { useState, useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { FiEdit, FiCamera, FiBell } from "react-icons/fi";
-import AnimeCards from "@/components/AnimeCards";
-import EditarPerfil from "@/components/EditarPerfil";
+import { FiEdit, FiCamera } from "react-icons/fi";
+
 import Loading from "@/components/Loading";
-import Link from "next/link";
-import MisReseñasCard from "@/components/MisReseñas";
+import EditarPerfil from "@/components/EditarPerfil";
+import PerfilTabs from "@/components/PerfilTabs";
+import PerfilContent from "@/components/PerfilContent";
+
 
 //  DATOS DE EJEMPLO (usados antes de hacer el back )
 // const mockUser = {
@@ -36,13 +45,13 @@ const perfil = () => {
   const [reseñas, setReseñas] = useState([]);
   const [editarPerfil, setEditarPerfil] = useState(false);
   const [activeTab, setActiveTab] = useState("favoritos"); // Estado para controlar la pestaña activa
-  // const [error, setError] = useState(null);
-  const [datosAmigos, setDatosAmigos] = useState({
-    amigos: [],
-    solicitudes: [],
-  });
+ 
+   const [datosAmigos, setDatosAmigos] = useState({
+     amigos: [],
+     solicitudes: [],
+   });
 
-  const { user, token, loading, error } = useAuth();
+  const { user, token, loading, error, fetchUserData } = useAuth();
   const router = useRouter();
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -52,221 +61,91 @@ const perfil = () => {
     ? `${rutaBackend}${user.fotoPerfil}`
     : user?.fotoPerfil || "/img/avatar1.png";
 
-  //useEffect para cargar los datos de amigos cuando la pestaña esté activa
+  //useEffect para cargar los datos de amigos o de reseñas cuando la pestaña esté activa
   useEffect(() => {
-    const fetchDatosAmigos = async () => {
-      if (activeTab === "amigos" && token) {
+    const fetchDatosTab = async () => {
+      if(!token) return; // si no hay token, no hago nada
+
+      let ruta= ""
+      if (activeTab === "reseñas") ruta="/reviews/my-reviews";
+      if (activeTab === "amigos" ) ruta="/friends/me";
+        
+        if(ruta){
         try {
-          const response = await fetch(`${apiUrl}/friends/me`, {
+          const response = await fetch(`${apiUrl}${ruta}`, {
             headers: { Authorization: `Bearer ${token}` },
           });
           const data = await response.json();
           if (response.ok) {
-            setDatosAmigos(data);
+            if (activeTab === 'reseñas') setReseñas(data);
+            if (activeTab === 'amigos') setDatosAmigos(data);
+           
             console.log(`mis datos de amigos son ${datosAmigos}`);
           }
         } catch (err) {
-          console.error("Error al cargar datos de amigos:", err);
+          console.error(`Error al cargar datos : ${activeTab}`, err);
         }
       }
     };
-    fetchDatosAmigos();
-  }, [activeTab, token]);
+    fetchDatosTab();
+  }, [activeTab, token, apiUrl]);
 
+
+  // FUNCIONES PARA ACEPTAR Y RECHAZAR SOLICITUDES DE AMISTAD
   const handleAceptarSolicitud = async (usuarioQueEnvia) => {
     /*fetch a PUT /friends/accept/:usuarioQueEnvia  */
+    try{
+      const response= await fetch(`${apiUrl}/friends/accept/${usuarioQueEnvia}`, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+      if (!response.ok) {
+        throw new Error("Error al aceptar la solicitud");
+      }
+      console.log("Solicitud aceptada correctamente" );
+      // actualizo los datos
+      await fetchUserData()
+    }catch (error) {
+      console.error("Error al aceptar la solicitud:", error);
+    }
   };
   const handleRechazarSolicitud = async (usuarioQueEnvia) => {
     /*fetch a PUT /friends/accept/:usuarioQueEnvia  */
-  };
-
-  useEffect(() => {
-    const fetchMisReseñas = async () => {
-      if (activeTab === "reseñas" && token) {
-        try {
-          const response = await fetch(`${apiUrl}/reviews/my-reviews`, {
-            headers: { Authorization: `Bearer ${token}` },
-          });
-          if (!response.ok) {
-            throw new Error("Error al obtener las reseñas");
-          }
-          const data = await response.json();
-          setReseñas(data);
-          console.log("mis reseñas son:", data);
-        } catch (error) {
-          console.error("Error al obtener reseñas:", error);
-        }
+    try{
+      const response= await fetch(`${apiUrl}/friends/reject/${usuarioQueEnvia}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+      if (!response.ok) {
+        throw new Error("Error al aceptar la solicitud");
       }
-    };
-    fetchMisReseñas();
-  }, [activeTab, token]); //se ejecuta cuando cambia activeTab(pestaña) o token
-
-  const renderContent = () => {
-    switch (activeTab) {
-      case "favoritos":
-        // se verifica que el usuario y la lista estén
-        if (!user?.favoritos || user?.favoritos.length === 0) {
-          return (
-            <div>
-              <h2 className="text-2xl font-bold mb-4">Mis Animes Favoritos</h2>
-              <p className="text-slate-400">
-                Aún no has añadido ningún anime a tus favoritos.
-              </p>
-            </div>
-          );
-        }
-        return (
-          <div>
-            <h2 className="text-2xl font-bold mb-4">Mis Animes Favoritos</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {/*uso el map sobre user.favoritos para mostrar el contenido*/}
-              {user.favoritos.map((fav) => {
-                const cardFavorito = {
-                  mal_id: fav.animeId,
-                  titles: [{ type: "Default", title: fav.title }],
-                  images: { webp: { large_image_url: fav.image } },
-                  score: fav.score,
-                  genres: fav.genero ? [{ name: fav.genero }] : [],
-                  synopsis: "Haz clic en 'Ver más' para ver los detalles.",
-                };
-
-                return <AnimeCards key={fav.animeId} anime={cardFavorito} />;
-              })}
-            </div>
-          </div>
-        );
-      case "privada":
-        if (!user?.listaPrivada || user.listaPrivada.length === 0) {
-          return <p className="text-slate-400">La lista privada está vacía.</p>;
-        }
-        return (
-          <div>
-            <h2 className="text-2xl font-bold mb-4">Mi Lista Privada</h2>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {user.listaPrivada.map((priv) => {
-                const cardFavoritoPriv = {
-                  mal_id: priv.animeId,
-                  titles: [{ type: "Default", title: priv.title }],
-                  images: { webp: { large_image_url: priv.image } },
-                  score: priv.score,
-                  genres: priv.genero ? [{ name: fav.genero }] : [],
-                  synopsis: "Haz clic en 'Ver más' para ver los detalles.",
-                };
-
-                return (
-                  <AnimeCards key={priv.animeId} anime={cardFavoritoPriv} />
-                );
-              })}
-            </div>
-          </div>
-        );
-      case "reseñas":
-        return (
-          <div>
-            <h2 className="text-2xl font-bold mb-4">Mis Reseñas</h2>
-            {reseñas.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols gap-4">
-                {reseñas.map((review) => (
-                  <MisReseñasCard key={review._id} review={review} />
-                ))}
-              </div>
-            ) : (
-              <p className="text-slate-400">Aún no has realizado reseñas.</p>
-            )}
-          </div>
-        );
-      case "amigos":
-        return (
-          <div>
-            {/* SECCIÓN DE SOLICITUDES PENDIENTES */}
-            {datosAmigos.solicitudes.length > 0 && (
-              <div className="mb-8">
-                <h3 className="text-xl font-bold mb-4">
-                  Solicitudes de Amistad
-                </h3>
-                <div className="space-y-3">
-                  {datosAmigos.solicitudes.map((solicitud) => (
-                    <div
-                      key={solicitud._id}
-                      className="bg-slate-700 p-3 rounded-lg flex justify-between items-center"
-                    >
-                      <div className="flex items-center gap-3">
-                        <Link href="/perfil">
-                          <Image
-                            src={solicitud.fotoPerfil || "/img/avatar1.png"}
-                            width={40}
-                            height={40}
-                            alt={solicitud.username}
-                            className="w-10 h-10 rounded-full object-cover"
-                          />
-                        </Link>
-                        <span className="font-semibold">
-                          {solicitud.username}
-                        </span>
-                      </div>
-                      <div className="flex gap-2">
-                        <button
-                          onClick={() => handleAcceptRequest(solicitud._id)}
-                          className="bg-green-600 hover:bg-green-700 px-3 py-1 text-xs rounded"
-                        >
-                          Aceptar
-                        </button>
-                        <button
-                          onClick={() => handleRejectRequest(solicitud._id)}
-                          className="bg-red-600 hover:bg-red-700 px-3 py-1 text-xs rounded"
-                        >
-                          Rechazar
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* SECCIÓN DE LISTA DE AMIGOS */}
-            <div>
-              <h2 className="text-2xl font-bold mb-4">Mis Amigos</h2>
-              {datosAmigos.amigos.length > 0 ? (
-                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                  {datosAmigos.amigos.map((amigo) => (
-                    <Link key={amigo._id} href={`/perfil/${amigo.username}`}>
-                      <div className="text-center">
-                        <Image
-                          src={amigo.fotoPerfil || "/img/avatar1.png"}
-                          width={80}
-                          height={80}
-                          alt={amigo.username}
-                          className="w-20 h-20 rounded-full object-cover mx-auto"
-                        />
-                        <p className="mt-2 text-sm truncate">
-                          {amigo.username}
-                        </p>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-slate-400">Aún no tienes amigos.</p>
-              )}
-            </div>
-          </div>
-        );
+      console.log("Solicitud aceptada correctamente" );
+      // actualizo los datos
+      await fetchUserData()
+    }catch (error) {
+      console.error("Error al aceptar la solicitud:", error);
     }
   };
 
-  if (loading) {
-    return <Loading />;
-  }
 
+  // si el loading es true, muestra la animacion de carga
+  if (loading) {
+    return <Loading text="Cargando perfil..." />;
+  }
+  // si hay error, muestra un mensaje de error
   if (error) {
     return <p className="text-center text-red-500 mt-10">Error: {error}</p>;
   }
-
-  //si la carga ha terminado y AÚN no hay usuario, lo redirige a la página de login
-  if (!loading && !user) {
-    router.push("/login");
+  // si no hay usuario, redirige a login
+  if (!user) {
+    router.push('/login');
+    return <Loading text="Redirigiendo..." />; 
   }
 
   return (
@@ -299,57 +178,19 @@ const perfil = () => {
       </div>
 
       {/* --- PESTAÑAS DE NAVEGACIÓN --- */}
-      <div className="flex border-b border-slate-700 mt-8 mb-6">
-        <button
-          onClick={() => setActiveTab("favoritos")}
-          className={`px-4 py-2 font-medium text-sm transition-colors duration-200 ${
-            activeTab === "favoritos"
-              ? "border-b-2 border-cyan-500 text-white"
-              : "text-slate-400 hover:text-white"
-          }`}
-        >
-          Mis Favoritos
-        </button>
-        <button
-          onClick={() => setActiveTab("privada")}
-          className={`px-4 py-2 font-medium text-sm transition-colors duration-200 ${
-            activeTab === "privada"
-              ? "border-b-2 border-cyan-500 text-white"
-              : "text-slate-400 hover:text-white"
-          }`}
-        >
-          Mi Lista Privada
-        </button>
-        <button
-          onClick={() => setActiveTab("reseñas")}
-          className={`px-4 py-2 font-medium text-sm transition-colors duration-200 ${
-            activeTab === "reseñas"
-              ? "border-b-2 border-cyan-500 text-white"
-              : "text-slate-400 hover:text-white"
-          }`}
-        >
-          Mis Reseñas
-        </button>
-        <button
-          onClick={() => setActiveTab("amigos")}
-          className={`relative px-4 py-2 font-medium text-sm transition-colors duration-200 ${
-            activeTab === "amigos"
-              ? "border-b-2 border-cyan-500 text-white"
-              : "text-slate-400 hover:text-white"
-          }`}
-        >
-          Amigos
-          {/* Notificación de solicitud de amistad */}
-          {user?.solicitudAmistad?.length > 0 && (
-            <span className="absolute -top-1 -right-1 ...">
-              {user.solicitudAmistad.length}
-            </span>
-          )}
-        </button>
-      </div>
+ <PerfilTabs activeTab={activeTab} setActiveTab={setActiveTab} user={user} />
 
       {/* --- CONTENIDO DE PESTAÑA ACTIVA --- */}
-      <div>{renderContent()}</div>
+      <div className="mt-6">
+        <PerfilContent
+          activeTab={activeTab}
+          user={user}
+          reseñas={reseñas}
+          datosAmigos={datosAmigos}
+          onAccept={handleAceptarSolicitud}
+          onReject={handleRechazarSolicitud}
+        />
+      </div>
 
       {editarPerfil && (
         <EditarPerfil user={user} onClose={() => setEditarPerfil(false)} />

@@ -73,6 +73,7 @@ const FavoritoBtn = ({ anime }) => {
 
     return (
         <button
+            title={isFavorite ? "Eliminar de favoritos" : "Añadir a favoritos"}
             onClick={toggleFavorito}
             className="text-pink-700  text-3xl hover:scale-110 transition">
             {isFavorite ? <FaHeart /> : <FaRegHeart />}

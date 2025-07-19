@@ -164,12 +164,14 @@ const ComentBox = ({ anime }) => {
             {}
             <div className="flex  items-start justify-start  mb-2">
               {/* CAMBIAR ENLACE AL CREAR LA PAGINA DE PERFIL DE CADA USUARIO */}
-            <Link href="/perfil" className=" w-12 mr-2">  
+            <Link href={`/perfil/${r.user?.username}`} className=" w-12 mr-2">  
               <Image src={fotoPerfilSrc || '/img/avatar1.png'} width={35} height={35} alt={r.user?.username} className="w-12 h-12 rounded-full object-cover mr-2" />
              </Link> 
 
               <div className="flex flex-col  items-start">
+                <Link href={`/perfil/${r.user?.username}`}>
                 <span className="font-bold mb-0">{r.user?.username || "Anónimo"}</span>
+                </Link>
                 <span className="flex">
                   {[...Array(5)].map((_, i) => (
                     <span key={i} className={`text-lg ${i < r.rating ? "text-yellow-400" : "text-gray-500"}`}>★</span>
