@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 
 const registro = () => {
   const [formData, setFormData] = useState({
@@ -13,6 +14,7 @@ const registro = () => {
   });
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [verContraseña, setVerContraseña] = useState(false);
 
   const router = useRouter();
   const { login } = useAuth(); // esto irá en login.jsx para autenticar al usuario
@@ -107,19 +109,27 @@ const registro = () => {
           />
         </div>
 
-        <div className="flex flex-col">
+        <div className="flex flex-col relative">
           <label htmlFor="password" className="mb-1 font-medium">
             Contraseña
           </label>
           <input
             id="password"
-            type="password"
+            type={verContraseña ? "text" : "password"} //para que cambie el tipo si damos click*
             className="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="••••••••"
             required
             onChange={handleChange}
             value={formData.password}
           />
+            {/* boton para ver contraseña */}
+            <button
+              type="button"
+              onClick={() => setVerContraseña(!verContraseña)}
+              className="absolute inset-y-12 right-0 px-3 flex justify-center items-center text-slate-400 hover:text-cyan-400"
+            >
+              {verContraseña ? <FiEyeOff /> : <FiEye />}
+            </button>
         </div>
 
         <div className="flex flex-col">
@@ -128,7 +138,7 @@ const registro = () => {
           </label>
           <input
             id="repeatPassword"
-            type="password"
+            type={verContraseña ? "text" : "password"} //para que cambie el tipo si damos click*
             className="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="••••••••"
             required

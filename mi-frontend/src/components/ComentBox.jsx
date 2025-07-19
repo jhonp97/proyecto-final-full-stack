@@ -8,6 +8,7 @@ import { useAuth } from "@/context/AuthContext";
 import BtnPaginacion from "@/components/BtnPaginacion.jsx";
 import Link from "next/link";
 import Image from "next/image";
+import { FiEdit, FiTrash } from "react-icons/fi";
 
 const ComentBox = ({ anime }) => {
   const { user, token } = useAuth();
@@ -162,12 +163,13 @@ const ComentBox = ({ anime }) => {
           <li key={r._id} className="bg-slate-900 p-4 rounded-lg flex flex-col items-center sm:flex-row gap-4">
             {}
             <div className="flex  items-start justify-start  mb-2">
-
+              {/* CAMBIAR ENLACE AL CREAR LA PAGINA DE PERFIL DE CADA USUARIO */}
+            {/* <Link href="/perfil">  */}
               <Image src={fotoPerfilSrc || '/img/avatar1.png'} width={35} height={35} alt={r.user?.username} className="w-12 h-12 rounded-full object-cover mr-2" />
+            {/* </Link> */}
 
               <div className="flex flex-col  items-start">
                 <span className="font-bold mb-0">{r.user?.username || "Anónimo"}</span>
-                
                 <span className="flex">
                   {[...Array(5)].map((_, i) => (
                     <span key={i} className={`text-lg ${i < r.rating ? "text-yellow-400" : "text-gray-500"}`}>★</span>
@@ -180,8 +182,12 @@ const ComentBox = ({ anime }) => {
             {/* aplico el toString() para asegurarme de que el id es un string porque no me mostraba los botones  */}
             {user && user._id === r.user?._id.toString() && (
               <div className="flex gap-4 mt-2 pl-10">
-                <button onClick={() => handleEditar(r)} className="text-xs text-yellow-400 hover:underline">Editar</button>
-                <button onClick={() => handleEliminar(r._id)} className="text-xs text-red-500 hover:underline">Eliminar</button>
+                <button onClick={() => handleEditar(r)}
+                title="Editar" 
+                className="text-xs text-yellow-400 hover:underline cursor-pointer"><FiEdit/></button>
+                <button onClick={() => handleEliminar(r._id)} 
+                title="Eliminar"
+                className="text-xs text-red-500 hover:underline cursor-pointer"><FiTrash/></button>
               </div>
             )}
           </li>
