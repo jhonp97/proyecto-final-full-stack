@@ -1,3 +1,5 @@
+"use client"
+
 import Image from "next/image";
 
 // componente para reutilizar en la pagina de detalles de cada anime y en la pagina principal

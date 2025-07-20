@@ -6,6 +6,7 @@ import { useAuth } from "@/context/AuthContext";
 import Image from "next/image";
 import Loading from "@/components/Loading";
 import AnimeCards from "@/components/AnimeCards";
+import MisReseñasCard from "@/components/MisReseñas";
 import { FiUserPlus, FiCheck } from "react-icons/fi";
 
 const PerfilPublico = () => {
@@ -21,6 +22,7 @@ const PerfilPublico = () => {
 
     useEffect(() => {
         const fetchPerfil = async () => {
+            if(!username)return
             try {
                 const response = await fetch(`${apiUrl}/users/public/${username}`);
                 if (!response.ok) throw new Error("Usuario no encontrado.");
@@ -33,7 +35,7 @@ const PerfilPublico = () => {
                 setLoading(false);
             }
         };
-        if (username) fetchPerfil();
+        fetchPerfil();
     }, [username, apiUrl]);
 
     const handleEnviarSolicitud = async () => {
@@ -100,6 +102,41 @@ const PerfilPublico = () => {
                         </>
                     )}
                 </div>
+            </div>
+            {/* SECCIÓN DE FAVORITOS*/}
+            <div className="mt-10">
+                <h2 className="text-2xl font-bold mb-4">Animes Favoritos de {datosPerfil.username}</h2>
+                {datosPerfil.favoritos?.length > 0 ? (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                        {datosPerfil.favoritos.map(fav => {
+                            const cardAnime = {
+                                mal_id: fav.animeId,
+                                titles: [{ type: "Default", title: fav.title }],
+                                images: { webp: { large_image_url: fav.image } },
+                                score: fav.score,
+                                genres: fav.genero ? [{ name: fav.genero }] : [],
+                                synopsis: "Haz clic en 'Ver más' para ver los detalles.",
+                            };
+                            return <AnimeCards key={fav.animeId} anime={cardAnime} />;
+                        })}
+                    </div>
+                ) : (
+                    <p className="text-slate-400">{datosPerfil.username} no ha añadido animes a favoritos.</p>
+                )}
+            </div>
+
+            {/* SECCIÓN DE RESEÑAS  */}
+            <div className="mt-10">
+                <h2 className="text-2xl font-bold mb-4">Reseñas de {datosPerfil.username}</h2>
+                {datosPerfil.reseñas?.length > 0 ? (
+                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {datosPerfil.reseñas.map((review) => (
+                            <MisReseñasCard key={review._id} review={review} />
+                        ))}
+                    </div>
+                ) : (
+                    <p className="text-slate-400">{datosPerfil.username} no ha escrito ninguna reseña.</p>
+                )}
             </div>
         </section>
     );
