@@ -7,15 +7,12 @@ import Image from "next/image";
 const Hero = ({ imageSrc, title, subtitle }) => {
     return (
         <div className="relative h-[28rem] w-full overflow-hidden">
-            <Image
+            <img
                 src="/img/hero-aniverse1-2.png"
-                alt={`Imagen de ${title}`}
-                width={1920}
-                height={700}
-                sizes="100vw"
-                quality={100}
-                className="object-cover"
-                priority
+                alt={`Imagen de hero aniverse`}
+                
+                className="w-full h-full object-cover"
+                loading="lazy"
             />
 
 
