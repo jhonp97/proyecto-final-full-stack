@@ -13,7 +13,6 @@ const AmigosTab = ({ datosAmigos, onAccept, onReject }) => {
         <div className="mb-8">
           <h3 className="text-xl font-bold mb-4">Solicitudes de Amistad</h3>
           <div className="space-y-3">
-            
             {datosAmigos.solicitudes.map((solicitud) => {
               const fotoPerfilSrc = solicitud.fotoPerfil?.startsWith("/uploads")
                 ? `${rutaBackend}${solicitud.fotoPerfil}`

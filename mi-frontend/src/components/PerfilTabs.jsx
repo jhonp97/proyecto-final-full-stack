@@ -5,11 +5,11 @@
 const PerfilTabs = ({ activeTab, setActiveTab, user }) => {
      const tabs = ["favoritos", "privada", "reseñas", "amigos"];
     return ( 
-         <div className="flex border-b border-slate-700 mt-8 mb-6">
+         <div className="flex border-b border-slate-700 mt-8 mb-6 ">
             {tabs.map((tab)=>(
                 <button key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`px-4 py-2 font-medium text-sm transition-colors duration-200 ${
+                  className={`relative px-4 py-2 font-medium text-sm transition-colors duration-200 ${
                     activeTab === tab
                       ? "border-b-2 border-cyan-500 text-white"
                       : "text-slate-400 hover:text-white"

@@ -61,6 +61,13 @@ const perfil = () => {
     ? `${rutaBackend}${user.fotoPerfil}`
     : user?.fotoPerfil || "/img/avatar1.png";
 
+    useEffect(() => {
+    // Si la carga inicial ha terminado y AÚN no hay usuario, lo redirigimos
+    if (!loading && !user) {
+      router.push('/login');
+    }
+  }, [user, loading, router]);
+
   //useEffect para cargar los datos de amigos o de reseñas cuando la pestaña esté activa
   useEffect(() => {
     const fetchDatosTab = async () => {
@@ -133,21 +140,6 @@ const perfil = () => {
     }
   };
 
-
-  // si el loading es true, muestra la animacion de carga
-  if (loading || !user) {
-    return <Loading text="Cargando perfil..." />;
-  }
-  // si hay error, muestra un mensaje de error
-  if (error) {
-    return <p className="text-center text-red-500 mt-10">Error: {error}</p>;
-  }
-  // si no hay usuario, redirige a login 
-  useEffect(()=>{
-    if (!user) {
-      router.push('/login');
-    }
-  },[user,loading, router]) //para que se ejecute solo si cambian las variables
 
   return (
     <section className="max-w-7xl mx-auto p-4 md:p-8 text-white">

@@ -87,7 +87,7 @@ const PerfilPublico = () => {
                         <>
                             {esAmigo ? (
                                 <button disabled className="mt-4 flex items-center gap-2 bg-green-600 px-4 py-2 rounded-md text-sm cursor-not-allowed">
-                                    <FiCheck /> Ya son amigos
+                                    <FiCheck /> Amigo
                                 </button>
                             ) : enviarSolicitud || solicitudPendiente ? (
                                 <button disabled className="mt-4 flex items-center gap-2 bg-slate-600 px-4 py-2 rounded-md text-sm cursor-not-allowed">
