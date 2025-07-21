@@ -31,9 +31,9 @@ const ComentBox = ({ anime }) => {
     process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
 
   const rutaBackend = apiUrl.replace("/api/v1", ""); //remuevo para obtener la ruta del back
-  // url para la imagen si se sube, si no usa la que es por defecto
-  const fotoPerfilSrc = user?.fotoPerfil?.startsWith("/uploads") // aqui uso startsWith para verificar que la ruta empieza con /uploads
-    ? `${rutaBackend}${user.fotoPerfil}` : user?.fotoPerfil || "/img/avatar1.png";
+  // // url para la imagen si se sube, si no usa la que es por defecto
+  // const fotoPerfilSrc = user?.fotoPerfil?.startsWith("/uploads") // aqui uso startsWith para verificar que la ruta empieza con /uploads
+  //   ? `${rutaBackend}${user.fotoPerfil}` : user?.fotoPerfil || "/img/avatar1.png";
 
   const obtenerReseñas = async () => {
     try {
@@ -159,13 +159,17 @@ const ComentBox = ({ anime }) => {
       )}
 
       <ul className="mt-8 space-y-4">
-        {reseñasMostradas.length > 0 ? reseñasMostradas.map((r) => (
+        {reseñasMostradas.length > 0 ? reseñasMostradas.map((r) => {
+          const autorFotoSrc = r.user?.fotoPerfil?.startsWith("/uploads")
+      ? `${rutaBackend}${r.user.fotoPerfil}`
+      : r.user?.fotoPerfil || "/img/avatar1.png";
+        return(
           <li key={r._id} className="bg-slate-900 p-4 rounded-lg flex flex-col items-center sm:flex-row gap-4">
             {}
             <div className="flex  items-start justify-start  mb-2">
               {/* CAMBIAR ENLACE AL CREAR LA PAGINA DE PERFIL DE CADA USUARIO */}
             <Link href={`/perfil/${r.user?.username}`} className=" w-12 mr-2">  
-              <Image src={fotoPerfilSrc || '/img/avatar1.png'} width={35} height={35} alt={r.user?.username} className="w-12 h-12 rounded-full object-cover mr-2" />
+              <Image src={autorFotoSrc|| '/img/avatar1.png'} width={35} height={35} alt={r.user?.username} className="w-12 h-12 rounded-full object-cover mr-2" />
              </Link> 
 
               <div className="flex flex-col  items-start">
@@ -193,7 +197,7 @@ const ComentBox = ({ anime }) => {
               </div>
             )}
           </li>
-        )) : (
+)}) : (
           <p className="text-slate-500 text-center py-4">Sé el primero en dejar una reseña para este anime.</p>
         )}
       </ul>

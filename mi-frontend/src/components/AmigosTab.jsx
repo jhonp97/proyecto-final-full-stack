@@ -18,7 +18,7 @@ const AmigosTab = ({ datosAmigos, onAccept, onReject }) => {
                                 key={solicitud._id}
                                 className="bg-slate-700 p-3 rounded-lg flex justify-between items-center">
                                 <div className="flex items-center gap-3">
-                                    <Link href="/perfil">
+                                    <Link href={`/perfil/${r.user?.username}`}>
                                         <Image
                                             src={solicitud.fotoPerfil || "/img/avatar1.png"}
                                             width={40}
@@ -33,13 +33,13 @@ const AmigosTab = ({ datosAmigos, onAccept, onReject }) => {
 
                                 <div className="flex gap-2">
                                     <button
-                                        onAccept={() => onAccept(solicitud._id)}
+                                        onClick={() => onAccept(solicitud._id)}
                                         className="bg-green-600 hover:bg-green-700 px-3 py-1 text-xs rounded"
                                     >
                                         Aceptar
                                     </button>
                                     <button
-                                        onReject={() => onReject(solicitud._id)}
+                                        onClick={() => onReject(solicitud._id)}
                                         className="bg-red-600 hover:bg-red-700 px-3 py-1 text-xs rounded"
                                     >
                                         Rechazar

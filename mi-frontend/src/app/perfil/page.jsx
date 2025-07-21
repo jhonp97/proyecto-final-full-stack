@@ -87,7 +87,7 @@ const perfil = () => {
         }
       }
     };
-    fetchDatosTab();
+  fetchDatosTab();
   }, [activeTab, token, apiUrl]);
 
 
@@ -135,18 +135,19 @@ const perfil = () => {
 
 
   // si el loading es true, muestra la animacion de carga
-  if (loading) {
+  if (loading || !user) {
     return <Loading text="Cargando perfil..." />;
   }
   // si hay error, muestra un mensaje de error
   if (error) {
     return <p className="text-center text-red-500 mt-10">Error: {error}</p>;
   }
-  // si no hay usuario, redirige a login
-  if (!user) {
-    router.push('/login');
-    return <Loading text="Redirigiendo..." />; 
-  }
+  // si no hay usuario, redirige a login 
+  useEffect(()=>{
+    if (!user) {
+      router.push('/login');
+    }
+  },[user,loading, router]) //para que se ejecute solo si cambian las variables
 
   return (
     <section className="max-w-7xl mx-auto p-4 md:p-8 text-white">

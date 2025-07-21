@@ -23,6 +23,7 @@ const PerfilPublico = () => {
     useEffect(() => {
         const fetchPerfil = async () => {
             if(!username)return
+            setLoading(true)
             try {
                 const response = await fetch(`${apiUrl}/users/public/${username}`);
                 if (!response.ok) throw new Error("Usuario no encontrado.");
@@ -88,7 +89,7 @@ const PerfilPublico = () => {
                                 <button disabled className="mt-4 flex items-center gap-2 bg-green-600 px-4 py-2 rounded-md text-sm cursor-not-allowed">
                                     <FiCheck /> Ya son amigos
                                 </button>
-                            ) : requestSent || solicitudPendiente ? (
+                            ) : enviarSolicitud || solicitudPendiente ? (
                                 <button disabled className="mt-4 flex items-center gap-2 bg-slate-600 px-4 py-2 rounded-md text-sm cursor-not-allowed">
                                     Solicitud enviada
                                 </button>
