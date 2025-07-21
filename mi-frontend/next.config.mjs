@@ -20,7 +20,7 @@ const nextConfig = {
       // Regla para PRODUCCIÓN (añadir la url de vercel)
       {
         protocol: 'https',
-        hostname: 'mi-enlace-vercel.com', // mi enlace de vercel
+        hostname: 'https://proyecto-final-full-stack-delta.vercel.app/', // mi enlace de vercel
         port: '', 
         pathname: '/uploads/**',
       },
