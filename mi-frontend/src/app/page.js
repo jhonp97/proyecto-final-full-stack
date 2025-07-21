@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import heroImagen from "@/assets/hero-aniverse1-2.png"
 
 import AnimeCards from "@/components/AnimeCards";
 import Hero from "@/components/Hero";
@@ -46,7 +47,7 @@ export default function Home() {
     <section className=" text-white bg-slate-900">
       {/* hero */}
       <Hero
-        imageSrc="/img/hero-aniverse1-2.png"
+        imageSrc={heroImagen}
 
       />
 

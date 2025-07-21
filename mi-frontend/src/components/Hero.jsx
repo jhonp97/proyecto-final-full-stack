@@ -1,7 +1,7 @@
 "use client"
 
 import Image from "next/image";
-import heroImagen from "@/assets/hero-aniverse1-2.png"
+
 
 // componente para reutilizar en la pagina de detalles de cada anime y en la pagina principal
 
@@ -9,8 +9,8 @@ const Hero = ({ imageSrc, title, subtitle }) => {
     return (
         <div className="relative h-[28rem] w-full overflow-hidden">
             <Image
-                src={heroImagen}
-                alt={`Banner de Aniverse`}
+                src={imageSrc}
+                alt={`Banner de ${title}`}
                 fill
                 sizes="100vw"
                 quality={85}
