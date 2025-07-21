@@ -8,7 +8,7 @@ const Hero = ({ imageSrc, title, subtitle }) => {
     return (
         <div className="relative h-[28rem] w-full overflow-hidden">
             <Image
-                src="/img/hero-aniverse1-2.png"
+                src="/img/hero-aniverse1-2.PNG"
                 alt={`Imagen de ${title}`}
                 fill
                 sizes="100vw"
