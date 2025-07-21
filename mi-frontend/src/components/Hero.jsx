@@ -5,7 +5,7 @@ import heroImagen from "@/assets/hero-aniverse1-2.png"
 
 // componente para reutilizar en la pagina de detalles de cada anime y en la pagina principal
 
-const Hero = ({  title, subtitle }) => {
+const Hero = ({ imageSrc, title, subtitle }) => {
     return (
         <div className="relative h-[28rem] w-full overflow-hidden">
             <Image
