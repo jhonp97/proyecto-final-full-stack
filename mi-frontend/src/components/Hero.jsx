@@ -10,7 +10,8 @@ const Hero = ({ imageSrc, title, subtitle }) => {
             <Image
                 src="/img/hero-aniverse1-2.png"
                 alt={`Imagen de ${title}`}
-                fill
+                width={1920}
+                height={700}
                 sizes="100vw"
                 quality={100}
                 className="object-cover"
