@@ -20,7 +20,7 @@ const nextConfig = {
       // Regla para PRODUCCIÓN (añadir la url de vercel)
       {
         protocol: 'https',
-        hostname: 'https://proyecto-final-full-stack-delta.vercel.app/', // mi enlace de vercel
+        hostname: 'aniverse-api-g15y.onrender.com', // mi enlace de vercel
         port: '', 
         pathname: '/uploads/**',
       },
