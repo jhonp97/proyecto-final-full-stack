@@ -4,7 +4,18 @@ import Image from "next/image";
 import Link from "next/link";
 
 const AmigosTab = ({ datosAmigos, onAccept, onReject }) => {
-  const rutaBackend = process.env.NEXT_PUBLIC_API_URL.replace("/api/v1", "");
+  const apiUrl =
+    process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
+  const rutaBackend = apiUrl.replace("/api/v1", "");
+
+  // la linea 27 es como lo tenia y como lo he usado en otros componentes pero como lo he usado en dos secciones mejor decidí 
+  // hacerlo en una funcion para que se vea mejor y no tan confuso
+  const traerFotoPerfil = (usuario) => {
+  return usuario?.fotoPerfil?.startsWith("/uploads")
+    ? `${rutaBackend}${usuario.fotoPerfil}`
+    : usuario?.fotoPerfil || "/img/avatar1.png";
+};
+
 
   return (
     <div>
@@ -14,21 +25,22 @@ const AmigosTab = ({ datosAmigos, onAccept, onReject }) => {
           <h3 className="text-xl font-bold mb-4">Solicitudes de Amistad</h3>
           <div className="space-y-3">
             {datosAmigos.solicitudes.map((solicitud) => {
-              const fotoPerfilSrc = solicitud.fotoPerfil?.startsWith("/uploads")
-                ? `${rutaBackend}${solicitud.fotoPerfil}`
-                : solicitud.fotoPerfil || "/img/avatar1.png";
+              // const fotoPerfilSrc = solicitud.user?.fotoPerfil?.startsWith("/uploads")
+              //   ? `${rutaBackend}${solicitud.user.fotoPerfil}`
+              //   : solicitud.user?.fotoPerfil || "/img/avatar1.png";
+              
               return (
                 <div
                   key={solicitud._id}
                   className="bg-slate-700 p-3 rounded-lg flex justify-between items-center"
                 >
                   <div className="flex items-center gap-3">
-                    <Link href={`/perfil/${solicitud.username}`}>
+                    <Link href={`/perfil/${solicitud.datosAmigos?.username}`}>
                       <Image
-                        src={fotoPerfilSrc}
+                        src={traerFotoPerfil(solicitud)}
                         width={40}
                         height={40}
-                        alt={solicitud.username}
+                        alt={`foto perfil de ${solicitud.username}`}
                         className="w-10 h-10 rounded-full object-cover"
                       />
                     </Link>
@@ -61,25 +73,27 @@ const AmigosTab = ({ datosAmigos, onAccept, onReject }) => {
         <h2 className="text-2xl font-bold mb-4">Mis Amigos</h2>
         {datosAmigos.amigos.length > 0 ? (
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-            {datosAmigos.amigos.map((amigo) => (
+            {datosAmigos.amigos.map((amigo) => {
+              
+              return(
               <Link key={amigo._id} href={`/perfil/${amigo.username}`}>
                 <div className="text-center">
                   <Image
-                    src={amigo.fotoPerfil || "/img/avatar1.png"}
+                    src={traerFotoPerfil(amigo)}
                     width={80}
                     height={80}
-                    alt={amigo.username}
+                    alt={`foto perfil de ${amigo?.username}`}
                     className="w-20 h-20 rounded-full object-cover mx-auto"
                   />
                   {/* uso truncate por si el nombre es muy largo */}
                   <p className="mt-2 text-sm truncate">{amigo.username}</p>
                 </div>
               </Link>
-            ))}
+            )})}
           </div>
         ) : (
           <p className="text-slate-400">Aún no tienes amigos.</p>
-        )}
+            )}
       </div>
     </div>
   );

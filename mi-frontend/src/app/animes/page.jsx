@@ -31,6 +31,7 @@ const Animes = () => {
        
         setError(null);
 
+         const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
         const params = new URLSearchParams({
           page: page, // Añadimos la página por defecto
         });
@@ -43,9 +44,10 @@ const Animes = () => {
             params.append(paramKey, value);
           }
         });
-
+       
+       
         const response = await fetch(
-          `https://api.jikan.moe/v4/anime?${params.toString()}`
+          `${apiUrl}/jikan/animes?${params.toString()}`
         );
 
         if (!response.ok) {
@@ -53,7 +55,7 @@ const Animes = () => {
         }
         const data = await response.json();
 
-        setAnimes(data.data);
+        setAnimes(data.data || []);
         setTotalPages(data.pagination.last_visible_page);
       } catch (error) {
         console.error(`No se pudo cargar el archivo, error:`, error);

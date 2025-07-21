@@ -65,7 +65,8 @@ export const Header = () => {
       <Link href="/animes" onClick={isMobile ? handleClick : undefined} className={`transition ${pathname === "/animes" ? "text-cyan-400 font-semibold  border-b-2"  : "hover:text-cyan-400"}`}>
         Animes
       </Link>
-
+{!loading && (
+  <>
       {user ? (
         <>
           <Link href="/perfil" onClick={isMobile ? handleClick : undefined} className={`transition ${pathname === "/perfil" ? "text-cyan-400 font-semibold  border-b-2"  : "hover:text-cyan-400"}`}>
@@ -87,6 +88,8 @@ export const Header = () => {
         </>
       )}
     </>
+)}
+</>
   );
 
   return (

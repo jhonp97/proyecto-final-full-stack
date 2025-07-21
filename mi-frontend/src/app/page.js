@@ -6,9 +6,11 @@ import Image from "next/image";
 import AnimeCards from "@/components/AnimeCards";
 import Hero from "@/components/Hero";
 import Link from "next/link";
+import Loading from "@/components/Loading";
 
 export default function Home() {
   const [animes, setAnimes] = useState([])
+  const [loading, setLoading] = useState(true);
   // const [error, setError] = useState(null) comentado para luego hacer el loading.jsx y erros.jsx
 
 
@@ -16,14 +18,26 @@ export default function Home() {
   useEffect(() => {
     const getAnimes = async () => {
       try {
-        const response = await fetch("https://api.jikan.moe/v4/top/anime?limit=8")
-        const data = await response.json();
-         console.log(`mi data es ${data}`)
-         console.log(`mi data.data es ${data.data}`);
-        setAnimes(data.data)
+         const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
+        const response = await fetch(`${apiUrl}/jikan/top-anime`);
+
+        console.log("estado del fetch:", response.status);
+
+        if (!response.ok) {
+            throw new Error("Error al obtener datos de Jikan del servidor");
+    }
+        const data = await response.json()
+        console.log("Respuesta del backend:", data);
+
+        //  console.log(`mi data.data es ${data.data}`);
+        //para segurarme que siempre sea un array
+        setAnimes(Array.isArray(data.data) ? data.data : [])
 
       } catch (error) {
         console.error("Error al cargar animes", error)
+        setAnimes([])
+      }finally{
+        setLoading(false)
       }
     }
     getAnimes();
@@ -51,14 +65,20 @@ export default function Home() {
         </h2>
 
         {/* poner el loading aqui  */}
+        {loading ? (
+          <Loading />
+        ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 mt-6 p-3" >
-          {animes.map((anime) => (
+          {animes.length >0 ? (
+          animes.map((anime) => (
             <AnimeCards key={anime.mal_id} anime={anime} />
-          ))}
+          ))
+         ) : (
+              <p className="col-span-full text-center text-slate-400">No se pudieron cargar los animes, actualiza la pagina </p>
+            )}
         </div>
+          )}
       </div>
-
-
-    </section>
+</section>
   );
 }
