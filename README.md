@@ -13,7 +13,7 @@
 
   ### Estructura
 
-  ```bashh
+```bash
 +---public
 |   |   file.svg
 |   |   globe.svg
@@ -105,10 +105,10 @@
 
 1. Clonar el repositorio
 2. Asegurarse de que el backend este corriendo primero
-3.instalar las dependencias: `npm install'
-4.Crear un archivo `.env.local`y añadir la URL del backend, ejemplo:
-``` bash
+3.instalar las dependencias: `npm install`
+4.Crear un archivo `.env.local` y añadir la URL del backend, ejemplo:
+```bash
     NEXT_PUBLIC_API_URL=http://localhost:5000/api/v1
-```.
-5. ejecutarlo con 'npm run dev'
+```
+5. ejecutarlo con `npm run dev`
 6. Abrir `http://localhost:3000` en el navegador y disfrutar de la web 
