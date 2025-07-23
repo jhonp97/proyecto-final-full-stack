@@ -48,6 +48,8 @@ export default function Home() {
       {/* hero */}
       <Hero
         imageSrc={heroImagen}
+        title="  "
+        subtitle= " "
 
       />
 
