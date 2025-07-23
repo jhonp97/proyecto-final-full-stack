@@ -8,10 +8,10 @@ export const Footer = () => {
 
 
             <div className="mt-4 flex justify-center gap-6 text-lg">
-                <a href="https://www.instagram.com/" className="text-white hover:text-cyan-400"><FaInstagram size={20} /> </a>
-                <a href="https://www.facebook.com/" className="text-white hover:text-cyan-400"><FaFacebook size={20} /> </a>
-                <a href="https://x.com/?lang=es" className="text-white hover:text-cyan-400"> <FaTwitter size={20} /></a>
-                <a href="https://www.linkedin.com/in/jhonper1997/" className="text-white hover:text-cyan-400"> <FaLinkedin size={20} /></a>
+                <a href="https://www.instagram.com/" target="_blank" className="text-white hover:text-cyan-400"><FaInstagram size={20} /> </a>
+                <a href="https://www.facebook.com/" target="_blank" className="text-white hover:text-cyan-400"><FaFacebook size={20} /> </a>
+                <a href="https://x.com/?lang=es" target="_blank" className="text-white hover:text-cyan-400"> <FaTwitter size={20} /></a>
+                <a href="https://www.linkedin.com/in/jhonper1997/" target="_blank" className="text-white hover:text-cyan-400"> <FaLinkedin size={20} /></a>
             </div>
             <a href="/politicas"
                 className="block mt-1 text-white hover:text-cyan-400 ">
