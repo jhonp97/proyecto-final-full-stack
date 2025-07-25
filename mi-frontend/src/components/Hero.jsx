@@ -17,7 +17,7 @@ const Hero = ({ imageSrc, title, subtitle }) => {
                 quality={85}
                 priority
                 className=" object-cover"
-                 placeholder="blur"
+                
             />
 
 
