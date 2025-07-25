@@ -6,7 +6,12 @@ const FiltroAnimes = ({ filtro, setFiltro }) => {
   const [delay, setDelay] = useState(filtro.name);
 
   
-  // este useEffect es contiene un estado de espera que se usa para corregir el error de me salia al escribir el nombre de algun anime para buscarlo, como la API  de Jijan no permite hacer mas de dos solicitudes en un segundo salta error, para corregir eso por eso se espero medio segundo despues de escribir una palabra
+  /**   este useEffect es contiene un estado de espera que se usa para corregir
+   *  el error de me salia al escribir el nombre de algun anime para buscarlo, como
+   *  la API  de Jijan no permite hacer mas de dos solicitudes en un segundo salta 
+   * error, para corregir eso por eso se espero medio segundo despues de escribir una 
+   * palabra
+   */ 
 
   useEffect(() => {
     const esperar = setTimeout(() => {

@@ -30,6 +30,7 @@ const PerfilContent = ({activeTab, user, reseñas, datosAmigos, onAccept, onReje
          </div>
      );
      case "reseñas":
+      // se verifica si hay reseñas o no
          if (!reseñas || reseñas.length === 0){
             return <p className="text-slate-400">Aún no has realizado reseñas.</p>
          }
@@ -47,6 +48,7 @@ const PerfilContent = ({activeTab, user, reseñas, datosAmigos, onAccept, onReje
       return <AmigosTab datosAmigos={datosAmigos} onAccept={onAccept} onReject={onReject} />;
 
       case "privada":
+        // se verifica si el usuario tiene animes en su lista privada o no
         if (!user?.listaPrivada || user.listaPrivada.length === 0) {
           return <p className="text-slate-400">La lista privada está vacía.</p>;
         }

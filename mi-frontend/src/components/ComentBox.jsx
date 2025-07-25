@@ -1,6 +1,12 @@
 "use client";
 
-// este componente muestra y permite agregar reseñas (comentarios + puntuación) para un anime, conecto con el backend para obtener y guardar los comentarios y las puntuaciones de cada usuario, con estrellas interactivas y también muestra reseñas que otros usuarios ya dejaron.
+
+/** este componente muestra y permite agregar reseñas (comentarios + puntuación) 
+ * para un anime, conecto con el backend para obtener y guardar los comentarios
+ *  y las puntuaciones de cada usuario, con estrellas interactivas y también muestra 
+ * reseñas que otros usuarios ya dejaron.
+ */
+
 
 import { useState, useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";

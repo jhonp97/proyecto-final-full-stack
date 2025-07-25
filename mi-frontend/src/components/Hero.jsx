@@ -2,8 +2,9 @@
 
 import Image from "next/image";
 
-
-// componente para reutilizar en la pagina de detalles de cada anime y en la pagina principal
+/**componente para reutilizar en la pagina de detalles de cada anime y en 
+ * la pagina principal
+ */
 
 const Hero = ({ imageSrc, title, subtitle }) => {
     return (

@@ -1,9 +1,14 @@
 "use client";
 
+/**Este componente se encarga de manejar el inicio de sesión de los
+ *  usuarios, gestionando el estado del formulario, el proceso de autenticación,
+ *  y la visualización de errores o el estado de carga 
+ * */
+
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
-import { FiEye, FiEyeOff } from "react-icons/fi";
+import { FiEye, FiEyeOff } from "react-icons/fi"; // iconos de mostrar/ocultar contraseña
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -17,6 +22,7 @@ const Login = () => {
   const router = useRouter();
   const { login } = useAuth();
 
+  //funcion para los campos del formulario
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -24,6 +30,7 @@ const Login = () => {
     });
   };
 
+  //funcion para manejar el evento de envio por defecto del formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
@@ -31,10 +38,10 @@ const Login = () => {
 
     try {
       const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      // aqui envio los datos del login al backend
       const response = await fetch(`${apiUrl}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        // envuamos los datos del formulario
         body: JSON.stringify({
           email: formData.email,
           password: formData.password,
@@ -50,6 +57,7 @@ const Login = () => {
       login(data.data, data.data.token);
       console.log("sesion iniciada ", data.data);
       router.push("/perfil");
+
     } catch (err) {
       setError(err.message, "error al iniciar sesion");
       console.error("Error al iniciar sesión:", err);
@@ -67,6 +75,7 @@ const Login = () => {
         onSubmit={handleSubmit}
         className="w-full max-w-md m-8 p-7 border rounded-lg shadow-lg flex flex-col gap-8 bg-slate-800"
       >
+        {/* para mostrar por si hay algun error */}
         {error && (
           <p className="bg-red-500 text-center text-white p-3 rounded ">
             Error al iniciar sesión

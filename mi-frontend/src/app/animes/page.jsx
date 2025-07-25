@@ -1,5 +1,11 @@
 "use client";
 
+/** Este componente trae datos desde el backend que a su vez trae datos desde la API de jikan
+ * muestro los animes y con los filtros establecidos los ordeno segun lo requiera
+ * realizo el control de errores y la animacion de carga
+ * luego muestro los componentes de AnimeCards, FiltroAnimes y BtnPaginacion
+ */
+
 import AnimeCards from "@/components/AnimeCards";
 import FiltroAnimes from "@/components/FiltroAnimes";
 import BtnPaginacion from "@/components/BtnPaginacion";
@@ -18,13 +24,15 @@ const Animes = () => {
   // const [filtro, setFiltro] = useState("all")
 
   const [filtro, setFiltro] = useState({
-    name: "", //
-    status: "", //  completado
-    genres: "", // número de género
+    name: "", // nombre del anime
+    status: "", //  estado, ej: completado
+    genres: "", // número de género 
     order_by: "", // para ordenar por puntuación
     sort: "desc", // orden descendente
   });
 
+
+  // este useEffect se ejecuta cuando la pagina cambia o se cambian los filtros
   useEffect(() => {
     const traerAnimes = async () => {
       try {
@@ -45,7 +53,7 @@ const Animes = () => {
           }
         });
        
-       
+       // peticion al back 
         const response = await fetch(
           `${apiUrl}/jikan/animes?${params.toString()}`
         );
@@ -55,20 +63,24 @@ const Animes = () => {
         }
         const data = await response.json();
 
+        // guardo los animes y las paginas disponibles
         setAnimes(data.data || []);
         setTotalPages(data.pagination.last_visible_page);
+
       } catch (error) {
         console.error(`No se pudo cargar el archivo, error:`, error);
         setError(error.message);
       } finally {
-        setLoading(false);
+        setLoading(false); // finaliza el estado de carga
       }
     };
 
     traerAnimes();
   }, [page, filtro]);
 
-  // esta funcion es para que no me salga error en la pagina ya que la api no me permite hacer mas de dos peticiones por segundo
+  /** esta funcion se encarga de aplicar nuevos filtros y reiniciar la pagina 
+   * a la numero 1, para evitar errores de paginacion
+   *  */
   const handleFiltroChange = (nuevoFiltro) => {
     setFiltro(nuevoFiltro);
     setPage(1);

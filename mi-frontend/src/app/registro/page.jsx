@@ -1,9 +1,15 @@
 "use client";
 
+/**
+ * en este componente se maneja el registro de un nuevo ususario, 
+ * gestionando el estado del formulario, la validacion de las contraseñas,
+ * enviar los datos al backend, y autenticar el usuario despues de que se
+ *  registró
+ *  */ 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
-import { FiEye, FiEyeOff } from "react-icons/fi";
+import { FiEye, FiEyeOff } from "react-icons/fi"; // iconos
 
 const registro = () => {
   const [formData, setFormData] = useState({
@@ -19,6 +25,7 @@ const registro = () => {
   const router = useRouter();
   const { login } = useAuth(); // esto irá en login.jsx para autenticar al usuario
 
+   //funcion para los campos del formulario
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -26,6 +33,7 @@ const registro = () => {
     });
   }
 
+  //funcion para manejar el evento de envio por defecto del formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
@@ -38,6 +46,7 @@ const registro = () => {
 
     try{
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
+      // envio los datos al back
       const response = await fetch(`${apiUrl}/auth/register`, {
         method: "POST",
         headers:{ "Content-Type": "application/json"},

@@ -1,5 +1,9 @@
 "use client"
-// mi componente para el boton de favoritos, el cual añade o quita el anime de la lista de favoritos, enviandolo a un backend y mostrandolo en la pagina de nuestro perfil
+
+/** mi componente para el boton de favoritos, el cual añade o quita el anime
+ *  de la lista de favoritos, enviandolo a un backend y mostrandolo en la
+ * pagina de nuestro perfil
+ */
 
 import { useState, useEffect } from "react"
 import { useAuth } from "@/context/AuthContext"

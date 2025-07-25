@@ -1,5 +1,7 @@
 "use client"
-
+/** este componente se encarga de mostrar las reseñas de los usuarios con 
+ * la imagen, el titulo, calificacion y su comentario
+ */
 import Image from "next/image"
 import Link from "next/link"
 

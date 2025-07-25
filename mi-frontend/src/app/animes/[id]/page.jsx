@@ -1,6 +1,5 @@
 "use client";
 
-// quitarlos error y el loading, organizar el diseño, habia otra cosa que arreglar y modificar pero no me acuerdo, volver a revisar
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation"
@@ -11,24 +10,26 @@ import ComentBox from "@/components/ComentBox";
 import Hero from "@/components/Hero";
 import Loading from "@/components/Loading";
 import Link from "next/link";
-import { FaPlay } from "react-icons/fa";
+import { FaPlay } from "react-icons/fa"; //icono de play
 
 
 
 
 export default function AnimeDetail() {
+  // obtengo el ID del anime desde la url
   const { id } = useParams();
   const [anime, setAnime] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    //funcion para obtener los datos del anime
     const fetchAnime = async () => {
       try {
         const res = await fetch(`https://api.jikan.moe/v4/anime/${id}`);
         const data = await res.json();
-        console.log(data)
-        setAnime(data.data);
+        console.log(data) // muestro los datos de la API en consola
+        setAnime(data.data); // almaceno los detalles del anime en el estado
       } catch (err) {
         setError("No se pudo cargar el anime.");
       } finally {
@@ -37,14 +38,16 @@ export default function AnimeDetail() {
     };
 
     fetchAnime();
-  }, [id]);
+  }, [id]); // se ejecuta cada que el ID cambia
 
+  // Si la aplicación está cargando, muestro un componente de carga
   if (loading) {
     return (
       <Loading />
     );
   }
 
+    // por si hay un error o no se pudo cargar el anime
   if (error || !anime) {
     return (
       <section className="p-10 text-center text-white bg-red-800">
